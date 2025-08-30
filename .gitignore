@@ -28,3 +28,11 @@ ops/*.attest.json
 .mypy_cache/
 .pytest_cache/
 .ruff_cache/
+
+# secrets
+ops/secret.key
+
+# local data vaults
+/data/raw/
+/data/processed/*.db
+/data/reports/*.md
