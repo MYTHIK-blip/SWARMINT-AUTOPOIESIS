@@ -39,3 +39,17 @@ ops/secret.key
 
 # build artifacts
 /dist/
+
+# build artifacts
+/dist/
+# local vaults
+/data/raw/
+/data/processed/
+/data/reports/
+# env & caches
+.venv/
+.mypy_cache/
+.ruff_cache/
+.pytest_cache/
+# secrets
+ops/secret.key
