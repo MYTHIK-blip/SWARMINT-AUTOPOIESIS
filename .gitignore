@@ -36,3 +36,6 @@ ops/secret.key
 /data/raw/
 /data/processed/*.db
 /data/reports/*.md
+
+# build artifacts
+/dist/
