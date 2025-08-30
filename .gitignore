@@ -1,0 +1,30 @@
+# venvs + caches
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+
+# logs + temp
+logs/
+*.log
+
+# raw/processed runtime data
+data/raw/
+data/processed/
+data/reports/
+
+# ops secrets + runtime state
+ops/secret.key
+ops/run-record.json
+ops/*.spdx.json
+ops/*.attest.json
+
+# test/coverage junk
+.coverage
+.cache/
+.pytest_cache/
+
+# tool caches
+.mypy_cache/
+.pytest_cache/
+.ruff_cache/

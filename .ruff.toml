@@ -1,0 +1,6 @@
+line-length = 100
+target-version = "py312"
+exclude = ["data", "ops", ".venv", "tests/__pycache__", ".mypy_cache", ".pytest_cache", ".ruff_cache"]
+
+[lint]
+extend-select = ["I"]  # import sorting

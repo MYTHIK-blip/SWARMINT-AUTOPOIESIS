@@ -1,0 +1,80 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": [
+    "anomaly_id",
+    "seed_event_ids",
+    "signature",
+    "complexity_hint",
+    "provenance",
+    "ts_utc"
+  ],
+  "properties": {
+    "anomaly_id": {
+      "type": "string"
+    },
+    "ts_utc": {
+      "type": "string"
+    },
+    "seed_event_ids": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "signature": {
+      "type": "object",
+      "required": [
+        "sketch",
+        "similarity"
+      ],
+      "properties": {
+        "sketch": {
+          "type": "string"
+        },
+        "similarity": {
+          "type": "number"
+        }
+      }
+    },
+    "complexity_hint": {
+      "type": "string"
+    },
+    "dictionary_matches": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "type": "string"
+      }
+    },
+    "decision": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "provenance": {
+      "type": "object",
+      "required": [
+        "sha256",
+        "signature"
+      ],
+      "properties": {
+        "sha256": {
+          "type": "string"
+        },
+        "signature": {
+          "type": "string"
+        }
+      }
+    },
+    "notes": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  }
+}

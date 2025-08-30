@@ -1,0 +1,20 @@
+fri:
+  weights:
+    auth_fail: 1.0
+    anomaly: 2.0
+  bands:
+    green_max: 3
+    amber_max: 6
+provenance:
+  secret_file: ops/secret.key
+schema:
+  event: config/schema/event.schema.json
+  anomaly: config/schema/anomaly.schema.json
+storage:
+  events_jsonl: data/processed/events.jsonl
+  anomalies_jsonl: data/processed/anomalies.jsonl
+  sqlite_db: data/processed/catalog.db
+report:
+  out_dir: data/reports
+run_record:
+  path: ops/run-record.json

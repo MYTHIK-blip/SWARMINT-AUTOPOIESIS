@@ -1,0 +1,87 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": [
+    "event_id",
+    "ts_utc",
+    "source",
+    "raw",
+    "labels",
+    "provenance",
+    "classifier_ver"
+  ],
+  "properties": {
+    "event_id": {
+      "type": "string"
+    },
+    "ts_utc": {
+      "type": "string"
+    },
+    "source": {
+      "type": "object",
+      "required": [
+        "host",
+        "sensor",
+        "decoy"
+      ],
+      "properties": {
+        "host": {
+          "type": "string"
+        },
+        "sensor": {
+          "type": "string"
+        },
+        "decoy": {
+          "type": "boolean"
+        }
+      }
+    },
+    "raw": {
+      "type": "object"
+    },
+    "parsed": {
+      "type": "object"
+    },
+    "labels": {
+      "type": "object"
+    },
+    "fri_delta": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "provenance": {
+      "type": "object",
+      "required": [
+        "sha256",
+        "signature",
+        "sbom_ref",
+        "attestation"
+      ],
+      "properties": {
+        "sha256": {
+          "type": "string"
+        },
+        "signature": {
+          "type": "string"
+        },
+        "sbom_ref": {
+          "type": "string"
+        },
+        "attestation": {
+          "type": "string"
+        }
+      }
+    },
+    "classifier_ver": {
+      "type": "string"
+    },
+    "reclass_history": {
+      "type": [
+        "array",
+        "null"
+      ]
+    }
+  }
+}
