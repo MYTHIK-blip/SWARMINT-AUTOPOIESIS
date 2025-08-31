@@ -1,252 +1,293 @@
-# SWARMINT-AUTOPOIESIS  
-**Provenance-first, homeostatic SIEM embryo** · *Bronze Gate*
+<!--
+  SWARMINT-AUTOPOIESIS — Enterprise/Gamer Readme
+  Vibe: palantir x cyber-arcade | Bronze-solid, Silver-ready
+-->
 
-[![Status](https://img.shields.io/badge/gate-🟤_Bronze-v0.1)](#status)
-[![Python](https://img.shields.io/badge/python-3.11%2B-blue)](#quickstart)
-[![License](https://img.shields.io/badge/license-MIT-lightgrey)](#license)
+<p align="center">
+  <img src="https://img.shields.io/badge/Gate-🟤%20Bronze%20v0.1-%23cd7f32" alt="Gate Bronze">
+  <a href="https://github.com/MYTHIK-blip/SWARMINT-AUTOPOIESIS/releases/tag/bronze-gate-v0.1">
+    <img src="https://img.shields.io/badge/Release-bronze--gate--v0.1-1f6feb" alt="Release">
+  </a>
+  <img src="https://img.shields.io/badge/Branch-bronze%20(frozen)-8a2be2" alt="bronze branch">
+  <img src="https://img.shields.io/badge/Python-3.11%2B-3776ab?logo=python&logoColor=white" alt="python">
+  <img src="https://img.shields.io/badge/Mode-Air--Gap%20Ready-0b8f00" alt="Air Gap Ready">
+  <img src="https://img.shields.io/badge/Provenance-HMAC%20per%20event-111111" alt="Provenance">
+  <img src="https://img.shields.io/github/stars/MYTHIK-blip/SWARMINT-AUTOPOIESIS?style=social" alt="stars">
+  <img src="https://img.shields.io/github/downloads/MYTHIK-blip/SWARMINT-AUTOPOIESIS/total" alt="downloads">
+  <img src="https://img.shields.io/badge/License-MIT-blue" alt="License">
+</p>
 
-A minimal yet complete telemetry refinery that ingests `auth.log`, classifies events (PvP/PvE/Unknown), signs them with HMAC provenance, detects anomalies, computes **FRI (Fracture Readiness Index)**, and emits JSONL/SQLite + Markdown reports. Designed for **clear rollbacks, promotion gates, and supply-chain hygiene**.
+<h1 align="center">SWARMINT · AUTOPOIESIS</h1>
+<p align="center"><b>Provenance-first, homeostatic SIEM embryo</b><br/>
+<i>Built for degraded reality — keep signal alive under noise.</i></p>
 
----
+<p align="center">
+  <sub>
+    <a href="#-tldr">Quickstart</a> •
+    <a href="#%EF%B8%8F-architecture">Architecture</a> •
+    <a href="#-data--artifacts">Artifacts</a> •
+    <a href="#%EF%B8%8F-rollback--disaster-recovery">Rollback</a> •
+    <a href="#-branch--tag-topology">Branches & Tags</a> •
+    <a href="#%EF%B8%8F-gates--roadmap">Gates</a> •
+    <a href="#-operator-crib-copypaste">Operator Crib</a>
+  </sub>
+</p>
 
-## TL;DR (Bronze)
-- **Gate:** `bronze-gate-v0.1` (tag) · **Branch:** `bronze` (immutable rollback)  
-- **You can:** clone `--branch bronze`, or rehydrate from the **release tarball** + `SHA256SUMS.txt`  
-- Pipeline: ingest → classify → **prove** → store → anomaly → **FRI** → report
+<hr/>
 
----
+## ⚡ TL;DR
 
-## Table of Contents
-- [Status](#status)
-- [Quickstart](#quickstart)
-- [Architecture](#architecture)
-- [Data & Artifacts](#data--artifacts)
-- [Security & Provenance](#security--provenance)
-- [Rollback & DR](#rollback--dr)
-- [Promotion Gates & Roadmap](#promotion-gates--roadmap)
-- [Repo Layout](#repo-layout)
-- [Configuration](#configuration)
-- [Scripts](#scripts)
-- [Quality Gates (CI/Pre-commit)](#quality-gates-ci-pre-commit)
-- [Contributing](#contributing)
-- [License](#license)
-
----
-
-## Status
-- **Latest Release:** 🟤 **Bronze Gate v0.1** — SIEM embryo  
-- **Channels:**  
-  - Tag: `bronze-gate-v0.1`  
-  - Branch: `bronze` (protected, immutable rollback)  
-  - Default dev branch: `main` (evolves toward Silver)
-
-> **Industry alignment:** Release tag + protected rollback branch + release artifacts with checksums mirrors standard enterprise DR and change-control practice.
-
----
-
-## Quickstart
-
-### Requirements
-- Linux/macOS (WSL2 OK)
-- Python **3.11+**
-- `git`, `make` (optional)
-
-### Install & Smoke Run
 ```bash
+# Clone (SSH)
 git clone git@github.com:MYTHIK-blip/SWARMINT-AUTOPOIESIS.git
 cd SWARMINT-AUTOPOIESIS
-python -m venv .venv && source .venv/bin/activate
-pip install -r requirements.txt
-# (if present) pip install -r ops/requirements.lock.txt
-
-# Place or symlink a sample auth log:
-#   cp /var/log/auth.log data/raw/auth.log
-# Or generate via scripts/sample_data.py
-
-bash scripts/run_embryo.sh
-# Outputs -> data/processed/*.jsonl, catalog.db, fri.json, and data/reports/report_*.md
-<details><summary>Air-gap rehydrate (no git history)</summary>
-Download SWARMINT-AUTOPOIESIS_bronze-gate-v0.1_src.tar.gz and SHA256SUMS.txt from the Release page.
-
-Verify and extract:
-
 bash
 Copy code
-sha256sum -c SHA256SUMS.txt
-tar -xzf SWARMINT-AUTOPOIESIS_bronze-gate-v0.1_src.tar.gz
-cd SWARMINT-AUTOPOIESIS && python -m venv .venv && source .venv/bin/activate
-pip install -r requirements.txt
+# Run the Bronze embryo (with synthetic data)
+python -m venv .venv && source .venv/bin/activate
+pip install -r requirements.txt || true
+python -u scripts/sample_data.py
 bash scripts/run_embryo.sh
-</details>
-Architecture
+bash
+Copy code
+# Check output
+ls -lh data/processed/events.jsonl data/processed/anomalies.jsonl data/processed/fri.json
+ls -lh data/reports/
+Bronze is frozen at branch bronze and tag bronze-gate-v0.1.
+For air-gap restores, use the curated tarball + SHA256SUMS.txt from the Release.
+
+🧠 Ethos
+Provenance > spectacle. Every event is HMAC-signed + checksummed.
+
+Homeostasis as signal. FRI (Fracture Readiness Index) + banding communicates posture shifts.
+
+Degenerate-friendly. Minimal deps, deterministic restore, runs on constrained boxes.
+
+Immutable gates. Release + rollback you can trust.
+
+🧩 What It Does (Bronze)
+Ingest: normalize auth.log
+
+Classify: PvP / PvE / Unknown
+
+Provenance: HMAC + SHA256 per event (ops/secret.key, never committed)
+
+Persist: JSONL (events.jsonl) + SQLite (catalog.db)
+
+Detect: anomalies.jsonl
+
+Assess: fri.json (value + band)
+
+Report: human report data/reports/report_*.md
+
+🗺️ Architecture
 mermaid
 Copy code
 flowchart LR
-  A[auth.log] --> B[Ingest\n(scripts/ingest.py)]
-  B --> C{Classifier\nPvP / PvE / Unknown}
-  C --> D[Provenance\nHMAC + sha256]
-  D --> E[Store\nJSONL + SQLite]
-  E --> F[Anomaly Detector]
-  F --> G[FRI Compute]
-  G --> H[Report\nMarkdown]
-Design tenets
+  A[ data/raw/auth.log ] --> B[ ingest.py<br/>normalize + parse ]
+  B --> C{ classify<br/>PvP / PvE / Unknown }
+  C --> D[ provenance<br/>HMAC + sha256 ]
+  D --> E[ store<br/>events.jsonl + catalog.db ]
+  E --> F[ anomalies.jsonl ]
+  E --> G[ fri.py → fri.json ]
+  F --> H[ report.py ]
+  G --> H[ report.py ]
+  H --> I[ data/reports/report_*.md ]
+Design Tenets
 
-Homeostatic: track FRI bands (Green/Yellow/Orange/Red) to signal posture shifts
+Small surface (pure Python)
 
-Provenance-first: every event signed with HMAC + sha256
+Deterministic release tarball + checksums
 
-Minimal surface: pure-Python, no heavy deps, runs on constrained boxes
+Operator-first UX (copy/paste flows)
 
-DR-ready: deterministic release pack + immutable rollback branch
-
-Data & Artifacts
-pgsql
+📦 Data & Artifacts
+bash
 Copy code
 data/
   raw/
-    auth.log                  # source input
+    auth.log
   processed/
     events.jsonl              # signed events
-    anomalies.jsonl           # anomaly findings
-    fri.json                  # aggregate FRI snapshot
-    catalog.db                # SQLite catalog (local vault)
+    anomalies.jsonl           # detector findings
+    fri.json                  # FRI value + band
+    catalog.db                # SQLite (local vault)
   reports/
     report_YYYY-MM-DD_HHMMSS.md
-events.jsonl fields (excerpt): ts, host, facility, severity, classifier, sha256, hmac, raw_line
+Event (excerpt)
 
-FRI: scalar with banding → Green/Yellow/Orange/Red (used to gate responses)
+json
+Copy code
+{
+  "ts": "2025-08-30T08:12:34Z",
+  "host": "node-01",
+  "facility": "auth",
+  "classifier": "PvP",
+  "sha256": "…",
+  "hmac": "…",
+  "raw": "sshd[1234]: Failed password for …"
+}
+FRI (excerpt)
 
-Security & Provenance
-HMAC event signing using key read from ops/secret.key (never committed).
-
-.gitignore excludes raw vaults, DBs, and reports by default to avoid accidental leakage.
-
-Recommended next step: signed tags (SSH/GPG) and SBOM at Gold.
-
-OPSEC note: If a secret key ever appeared in history, rotate immediately and invalidate old reports.
-
-Rollback & DR
-Clone the immutable Bronze branch:
+json
+Copy code
+{ "fri": 0.62, "band": "Yellow" }
+🔐 Security & Provenance
+HMAC per event using key at ops/secret.key (ignored by Git).
 
 bash
 Copy code
-git clone --branch bronze --single-branch git@github.com:MYTHIK-blip/SWARMINT-AUTOPOIESIS.git SWARMINT-AUTOPOIESIS-EMBRYO
-Rehydrate from release tarball (air-gap):
+# generate/rotate key locally
+mkdir -p ops
+openssl rand -hex 32 > ops/secret.key
+chmod 600 ops/secret.key
+.gitignore excludes raw vaults, DBs, reports, caches, and .venv/.
+
+Future gates: signed tags/releases, SBOM.
+
+♻️ Rollback & Disaster Recovery
+<details> <summary><b>Fast dev rollback — frozen branch</b></summary>
+bash
+Copy code
+git fetch --all --tags
+git switch bronze
+</details> <details> <summary><b>Deterministic ops/air-gap restore — verified tarball</b></summary>
+Download from Bronze Release:
+
+SWARMINT-AUTOPOIESIS_bronze-gate-v0.1_src.tar.gz
+
+SHA256SUMS.txt
 
 bash
 Copy code
 sha256sum -c SHA256SUMS.txt
 tar -xzf SWARMINT-AUTOPOIESIS_bronze-gate-v0.1_src.tar.gz
-Verify release/tag locally:
+cd SWARMINT-AUTOPOIESIS
+python -m venv .venv && source .venv/bin/activate
+pip install -r requirements.txt || true
+bash scripts/run_embryo.sh
+</details> <details> <summary><b>Pin exact Bronze tag (detached)</b></summary>
+bash
+Copy code
+git fetch --all --tags
+git switch --detach bronze-gate-v0.1
+</details>
+🌳 Branch / Tag Topology
+scss
+Copy code
+(tag) bronze-gate-v0.1 ─┐
+(branch) bronze ────────┤  (immutable rollback line)
+                         └── main ── feature branches (e.g., silver) ──> PRs ──> main
+Verify the pin
 
 bash
 Copy code
-git tag -l | grep bronze-gate-v0.1
-# (If signed later)
-# git verify-tag -v bronze-gate-v0.1
-Promotion Gates & Roadmap
+git rev-parse bronze-gate-v0.1^{}
+git rev-parse origin/bronze
+git rev-parse bronze
+# all three SHAs should match
+🛣️ Gates & Roadmap
 mermaid
 Copy code
 stateDiagram-v2
   [*] --> Bronze
   Bronze --> Silver: Stability + Observability
-  Silver --> Gold: Packaging + Dashboards + SBOM
+  Silver --> Gold: Packaging + Parsers + SBOM
   Gold --> Diamond: Governance + Mutation + Lineage
   Diamond --> [*]
-🟤 Bronze (v0.1) – functional SIEM embryo ✓
-Ingest → classify → HMAC → anomalies → FRI → JSONL/SQLite/Markdown
+🟤 Bronze (v0.1) — Embryo shipped
+Ingest → classify → HMAC → anomalies → FRI → JSONL/SQLite/Markdown.
 
-🥈 Silver (v0.2) – stability & observability
-Dict packs + reclassifier, structured logs/metrics, CLI (swarmint), GH Actions CI, optional OTel/Loki exporter
+🥈 Silver (v0.2) — Stability & Observability
+metrics.json (events/anomalies/FRI + git rev + sha256s), minimal CI (ruff+mypy/pytest on PRs; on *-gate-* tags build & attach artifacts).
 
-🥇 Gold (v0.3) – packaging & integrity
-Docker/compose, journalctl/ufw/nginx parsers, deception role inputs, SBOM, Grafana JSON dashboards
+🥇 Gold (v0.3) — Packaging & Integrity
+Docker/compose, journalctl/ufw/nginx parsers, deception inputs, SBOM, dashboards.
 
-💎 Diamond (v1.0) – governance & mutation
-Mutation budgets/ledger, provenance lineage, H-I-T-L triage console, environment promotion
+💎 Diamond (v1.0) — Governance & Mutation
+Mutation budgets/ledger, provenance lineage, H-I-T-L triage console, environment promotions.
 
-Repo Layout
-graphql
-Copy code
-config/
-  process.yaml            # normalization/processing knobs
-  schema/
-    event.schema.json
-    anomaly.schema.json
-
-scripts/
-  run_embryo.sh           # one-shot pipeline runner
-  ingest.py               # parse + classify + sign
-  fri.py                  # compute FRI
-  report.py               # markdown report
-  sample_data.py          # sample generator
-  bronze_check.sh         # quick sanity checks
-
-data/                     # local vault (ignored by git)
-tests/                    # pytest for schemas + ingest
-ops/
-  run-record.json         # run metadata
-  secret.key              # HMAC key (ignored by git)
-
-.pre-commit-config.yaml, .ruff.toml, mypy.ini, requirements.txt
-Configuration
-config/process.yaml (excerpt of intent)
-
-Input paths / globbing
-
-Parse/normalization toggles
-
-Classifier thresholds / dictionaries (to be expanded in Silver)
-
-Report knobs (sections, limits)
-
-Schemas
-
-config/schema/event.schema.json – event payload invariants
-
-config/schema/anomaly.schema.json – anomaly records
-
-Scripts
-scripts/run_embryo.sh – Orchestrates the full run (ingest → store → FRI → report)
-
-scripts/ingest.py – Reads data/raw/auth.log, classifies, signs, writes events.jsonl + catalog.db
-
-scripts/fri.py – Computes FRI (banded)
-
-scripts/report.py – Emits Markdown report to data/reports/
-
-scripts/sample_data.py – Generates synthetic auth.log for testing
-
-scripts/bronze_check.sh – Lightweight gate checks (fsck, ruff, mypy, pytest)
-
-Quality Gates (CI / Pre-commit)
-Local dev
+🧪 Dev & Quality Gates
+Local hygiene
 
 bash
 Copy code
 pre-commit install
-pre-commit run --all-files
+pre-commit run --all-files || true
 ruff check .
 mypy .
-pytest -q
-CI (recommended minimal)
+pytest -q || true
+Tip: Activate the venv before running Python tasks.
 
-Lint + typecheck + tests on PRs
+bash
+Copy code
+source .venv/bin/activate
+(Silver CI — planned)
 
-On tags matching *-gate-*: build report + attach to Release
+PRs: ruff + mypy + pytest
 
-Contributing
-Commit emoji map
+Tags *-gate-*: run pipeline; upload report_*.md + metrics.json to the Release
 
-✨ feat, 🐛 fix, 📚 docs, ♻️ refactor, 🧪 test, 🧹 chore, 🔒 sec, ⚙️ ci
+🧰 Operator Crib (copy/paste)
+Run with synthetic input
 
-Branch rules
+bash
+Copy code
+python -u scripts/sample_data.py
+bash scripts/run_embryo.sh
+Show artifacts
 
-main: protected; PRs + checks required
+bash
+Copy code
+ls -lh data/processed/events.jsonl data/processed/anomalies.jsonl data/processed/fri.json
+ls -lh data/reports/
+Back to latest main
 
-bronze: immutable; no direct commits, no force-push
+bash
+Copy code
+git switch main
+git pull --ff-only
+Start Silver work
 
-Issues and PRs welcome. Please avoid committing any real logs or secrets.
+bash
+Copy code
+git switch main
+git pull --ff-only
+git switch -c silver
+🧭 Repo Layout
+pgsql
+Copy code
+config/
+  process.yaml
+  schema/
+    event.schema.json
+    anomaly.schema.json
+scripts/
+  run_embryo.sh
+  ingest.py
+  fri.py
+  report.py
+  sample_data.py
+  bronze_check.sh
+data/                    # local vault (ignored)
+ops/
+  run-record.json
+  secret.key             # HMAC key (ignored)
+tests/
+.pre-commit-config.yaml
+.ruff.toml
+.mypy.ini
+🧑‍💻 Real-World Uses
+Field laptop / bastion seed SIEM (no containers needed)
 
-License
-MIT — © 2025 MYTHIK-blip. See LICENSE.
+Air-gapped triage: restore from tarball, run against captured logs, export markdown report
+
+Forensics: verify checksums, re-run deterministically for reproducibility
+
+Training: operator drills on PvP/PvE classification + FRI posture
+
+📜 License & Attribution
+MIT — see LICENSE.
+
+Author: MYTHIK-blip (Kerehama Mcleod / MYTHIK)
+
