@@ -125,18 +125,19 @@ flowchart TD
 
 ~~~mermaid
 flowchart LR
-  subgraph Meadow [Inflow]
-    A[ data/raw/auth.log ]
+  subgraph Meadow_Inflow ["Meadow (Inflow)"]
+    A["data/raw/auth.log"]
   end
-  A --> B[Filter & Normalize]
-  B --> C{Classify<br/>PvP • PvE • Unknown}
-  C --> D[Seal with Wax<br/>(sha256 + HMAC)]
-  D --> E[Comb Cells<br/>events.jsonl • catalog.db]
-  E --> F[Detect Spoilage → anomalies.jsonl]
-  E --> G[Brood Temp → fri.json]
-  F --> H[Honey Report]
+
+  A --> B["Filter & Normalize"]
+  B --> C{"Classify (PvP / PvE / Unknown)"}
+  C --> D["Seal with Wax (sha256 + HMAC)"]
+  D --> E["Comb Cells: events.jsonl, catalog.db"]
+  E --> F["Detect Spoilage: anomalies.jsonl"]
+  E --> G["Brood Temp: fri.json"]
+  F --> H["Honey Report"]
   G --> H
-  H --> I[data/reports/report_*.md]
+  H --> I["data/reports/report_*.md"]
 ~~~
 
 **Local vaults (git-ignored)**
@@ -197,7 +198,7 @@ jq '.counts, .fri' data/processed/metrics.json
 
 ## 🛡️ **Security & Provenance Posture**
 ![Secrets](https://img.shields.io/badge/Secret-Local%20Key-444)
-![Tamper-evident](https://img.shields.io/badge/Tamper-evident-Yes-0b8f00)
+![Tamper-evident](https://img.shields.io/static/v1?label=Tamper%20evident&message=Yes&color=0b8f00&labelColor=555)
 ![Supply Chain](https://img.shields.io/badge/Supply%20Chain-Gold%20Scope-999)
 
 - **Per-event seals:** sha256 + **HMAC** on canonicalized payloads  
