@@ -13,6 +13,63 @@
 ![License: MIT](https://img.shields.io/badge/License-MIT-blue)
 
 ---
+## 🧭 Table of Contents
+
+- [Bronze Promotion Capsule](#-bronze-promotion-capsule)
+- [Quickstart (Nectar in 60s)](#-quickstart-nectar-in-60s)
+- [Feature Hive (Gates)](#-feature-hive-gates)
+- [Hive Ethos (Principles → Practices)](#-hive-ethos-principles--practices)
+- [Honeycomb Architecture (Bronze Snapshot)](#-honeycomb-architecture-bronze-snapshot)
+- [Release Artifacts (Tarball Discipline)](#-release-artifacts-tarball-discipline)
+- [Observability (Silver · Smoke Path)](#-observability-silver--smoke-path)
+- [Security & Provenance Posture](#-security--provenance-posture)
+- [Branch & Tag Topology (Hive Roles)](#-branch--tag-topology-hive-roles)
+- [Roadmap (Foraging Seasons)](#-roadmap-foraging-seasons)
+- [Operator Crib (Keeper Tools)](#-operator-crib-keeper-tools)
+- [Repo Layout (Comb Map)](#-repo-layout-comb-map)
+- [Performance & Limits (Thermal Range)](#-performance--limits-thermal-range)
+- [Failure Modes (Swarm Alarms)](#-failure-modes-swarm-alarms)
+- [Non-Goals (Not This Hive)](#-non-goals-not-this-hive)
+- [Threat Model & Trust Boundaries](#-threat-model--trust-boundaries)
+- [FRI — Definition & Tuning](#-fri-fracture-readiness-index--definition--tuning)
+- [metrics.json (Silver Smoke) — v0.2](#-metricsjson-silver-smoke--v02)
+- [Vectors & Use Cases (Expanded)](#-vectors--use-cases-expanded)
+- [References (Curated)](#-references-curated)
+- [Funding & Research](#-funding--research)
+- [Contributing (Bee Dance)](#-contributing-bee-dance)
+- [License & Attribution](#-license--attribution)
+- [Bronze Invariants (Pinboard)](#-bronze-invariants-pinboard)
+
+---
+
+## 🧰 System Overview (As of 🟤 Bronze v0.1)
+
+![Scope](https://img.shields.io/badge/Scope-auth.log-555) ![Artifacts](https://img.shields.io/badge/Artifacts-JSONL%20%7C%20SQLite%20%7C%20Markdown-555) ![Provenance](https://img.shields.io/badge/Provenance-HMAC-important) ![Air-Gap](https://img.shields.io/badge/Air--Gap-Ready-0b8f00)
+
+**What it is.** A provenance-first, homeostatic SIEM embryo that runs locally, tolerates degraded conditions, and outputs tamper-evident artifacts.
+
+**What it does now (Bronze).**
+- Ingests `auth.log` ➜ normalizes ➜ classifies (**PvP / PvE / Unknown**)
+- Signs each event (**sha256 + HMAC**) and persists to `events.jsonl` + `catalog.db`
+- Detects basic anomalies ➜ `anomalies.jsonl`
+- Computes **FRI** (0–1) and **band** ➜ `fri.json`
+- Renders a human report ➜ `data/reports/report_*.md`
+
+**Artifacts you can trust.**
+- Per-event HMAC; dataset SHA & `git rev` recorded in reports
+- **Release tarball + SHA256SUMS** enables deterministic air-gap restore
+- **Immutable rollback**: branch `bronze` and tag `bronze-gate-v0.1` pin an exact commit
+
+**Operational posture.**
+- Batch execution (`scripts/run_embryo.sh`), pure-Python; runs on small VMs
+- No outbound telemetry; secrets stay local (`ops/secret.key`)
+- Designed for DFIR kits, austere environments, and educator demos
+
+**What it is not (yet).**
+- Not a full EDR/SOAR or realtime distributed correlation engine
+- Not shipping SBOM/signed releases (that’s **Gold**)
+
+---
 
 ## 🐝 **Bronze Promotion Capsule**
 ![Status: Shipped](https://img.shields.io/badge/Status-Shipped-0b8f00)
@@ -193,6 +250,126 @@ jq '.counts, .fri' data/processed/metrics.json
 - CI gate on PRs: ruff + mypy + pytest (badges in README)  
 - Classifier packs MVP + reclass history  
 - Rollback invariants preserved
+
+---
+
+## 🛡️ Attack Surface & Vectors
+
+![Surface](https://img.shields.io/static/v1?label=Surface&message=SSH%2FAuth&color=1f6feb) ![Scope](https://img.shields.io/static/v1?label=Scope&message=Host-local&color=555)
+
+**Primary vectors observed in auth logs**
+- Brute-force & credential-stuffing bursts (spray, list attacks)
+- Password-guessing on disabled/expired users; service/system accounts
+- Lateral movement attempts (sudden cross-host login patterns)
+- Privilege hunting (su/sudo escalations, non-interactive shells)
+- Persistence setup (new keys, repeated failed logins followed by success)
+- Log tampering indicators (gaps, truncation, out-of-order timestamps)
+
+**Signals → Tactics mapping (indicative)**
+| Signal | Likely Tactics | Notes |
+|---|---|---|
+| High fail rate from few IPs | Credential Access, Initial Access | Spray vs targeted (ratio of users per IP) |
+| Many users from one geo/ASN | Recon, Credential Access | Correlate with ASN rarity |
+| Off-hours lockouts | Impact, Defense Evasion | Escalate if followed by success |
+| Unknown user bursts | Recon, Credential Access | Reclass or pack update in Silver |
+| Sudden success after many fails | Credential Access, Lateral Movement | Weight in FRI lift |
+
+---
+
+## 🗂️ Telemetry Ontology
+
+![Model](https://img.shields.io/static/v1?label=Model&message=Events%2FArtifacts%2FMetrics&color=0b8f00)
+
+**Core entities**
+- **Principal** (user/service), **Host**, **Session**, **Event**, **Artifact** (file/report), **Signature** (HMAC/sha256), **Anomaly**, **Metric**
+
+**Event shape (Bronze) — subset**
+```yaml
+event:
+  ts_utc: ISO8601
+  host: string
+  user: string | null
+  src_ip: string | null
+  action: "auth_success" | "auth_fail" | "lockout" | "sudo" | "unknown"
+  status: "pvp" | "pve" | "unknown"
+  reason: string | null        # template/dict name when known
+  sha256: hex
+  hmac: hex
+
+---
+
+## 🔵🟣🔴🍯 Team Modes (Blue • Purple • Red • Honey) — paste-ready
+
+```md
+## 🔵🟣🔴🍯 Team Modes
+
+**Blue (defend)**
+- Read **FRI band** as posture; triage top anomalies; check burst windows
+- Actions: lock offending accounts; rotate keys; verify sudoers changes
+
+**Purple (tune)**
+- Convert recurring “Unknown” patterns into **dictionary packs**
+- Adjust **FRI weights** per environment; document before/after metrics
+
+**Red (exercise)**
+- Run controlled sprays with unique markers; ensure reports show separation
+- Target SLOs: Blue detects within N minutes; FRI crosses Yellow→Red
+
+**Honey (deception)**
+- Seed decoy users/keys; mark in packs as **decoy**
+- Alerts: any success on decoy → immediate Red band lift
+
+---
+
+## 🕶️ OPSEC & Handling
+
+![OPSEC](https://img.shields.io/static/v1?label=OPSEC&message=Local-first&color=555)
+
+- **Keys:** `ops/secret.key` local only; `chmod 600`; rotate on any suspicion
+- **Reports:** redact usernames/IPs before sharing externally (keep a sealed copy)
+- **Samples:** sanitize `auth.log` before committing; never push live secrets
+- **PR hygiene:** no output artifacts in PRs (only schemas/code)
+- **Air-gap:** prefer the release tarball + checksums for cross-org transfer
+
+---
+
+## 🧯 Alert Quality & SLOs
+
+**Quality targets (initial)**
+- Precision (manual spot-check): ≥ 0.75 on “Top 10 anomalies”
+- Recall (scenario drill): detect ≥ 80% of injected attack windows
+- MTTR proxy: time from Red FRI to human acknowledgement ≤ 30 min
+
+**Operational knobs**
+- Tune FRI weights; increase `unknown_lift` for noisy environments
+- Suppress repetitive benign templates by promoting them to packs (Silver)
+---
+
+## ⚙️ Config Profiles
+
+```yaml
+profiles:
+  austere:
+    fri: { unknown_lift: 0.25 }
+    parse: { strict: false }
+  default:
+    fri: { unknown_lift: 0.20 }
+  verbose:
+    fri: { unknown_lift: 0.10 }
+    detect: { burst_window_min: 1, sensitivity: high }
+---
+
+## 🧪 Sample Report Snip
+
+```text
+SWARMINT-AUTOPOIESIS — report_2025-08-29_073245.md
+git_rev: dc99fd5  input_sha256: b3c1...f0a2
+
+FRI: 0.62 (Yellow)
+Top anomalies:
+ - 02:14–02:18Z: 146 auth_fail from 2 IPs → 11 users (spray)
+ - 03:52Z: sudo escalation attempt (invalid tty) → user: svc-backup
+ - 04:05Z: lockouts=4 on off-hours window
 
 ---
 
@@ -482,3 +659,49 @@ Author: **Kerehama Mcleod (MYTHIK-blip / _MYTHIK_)**
 - [ ] `.gitignore` covers `data/`, caches, and `ops/secret.key`  
 - [ ] README renders clean (badges, mermaid, fenced blocks)  
 - [ ] No mixed HTML; blank lines around lists/blocks
+
+---
+
+## 🛣️ Future Iterations & Promotions
+
+![Now: Bronze](https://img.shields.io/badge/Now-Bronze-🟤) ![Next: Silver Smoke](https://img.shields.io/badge/Next-Silver%20Smoke-⚪) ![Then: Gold](https://img.shields.io/badge/Then-Gold-🟡) ![Apex: Diamond](https://img.shields.io/badge/Apex-Diamond-💎)
+
+**Promotion ritual (every gate).**
+1) Meet exit criteria
+2) Tag `*-gate-vX.Y`
+3) Create immutable rollback branch (`bronze`, later `silver`)
+4) Attach release tarball + `SHA256SUMS.txt`
+5) Protect branch (no direct pushes, PRs only)
+
+**Exit criteria highlights**
+- **Silver (v0.2 — “Smoke”)**: `metrics.json` per run; CI gates (ruff, mypy, pytest); classifier packs MVP; docs updated  
+- **Gold (v0.3)**: Docker packaging; parsers (`journalctl`, `ufw`, `nginx`); SBOM + signed releases  
+- **Diamond (v1.0)**: Mutation budgets & provenance lineage; HITL triage console
+
+---
+
+## 💸 Funding & 🔬 Research
+
+![Sponsorship](https://img.shields.io/badge/Sponsorship-Open-1f6feb) ![Collab](https://img.shields.io/badge/Research-Collaboration%20Welcome-0b8f00)
+
+**Why fund this?**  
+Resilient, **air-gap-friendly** telemetry with tamper-evident artifacts and clean rollback lines. Designed for civic ops, DFIR, SMEs, and austere deployments.
+
+**Ways to support**
+- GitHub Sponsors / Open Collective *(links to be added)*  
+- Grants or research co-funding *(security + provenance + civic resilience)*  
+- Hardware kits for austere field testing
+
+**Research collaboration areas**
+- Log anomaly detection under **partial compromise** and **intermittent networks**
+- Evidence **chain-of-custody** and layered attestations (pair with SBOM/SLSA)
+- Human-readable posture metrics (FRI) vs task success in IR drills
+- Dataset contributions: sanitized `auth.log` snapshots with labeled episodes
+
+**How to cite**
+See the **Cite (Bronze)** BibTeX in the License section. A “Cite (Silver)” entry will accompany the next promotion.
+
+---
+---
+---
+---
