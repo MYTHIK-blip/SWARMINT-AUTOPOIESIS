@@ -5,7 +5,7 @@
 [![Gate: 🟤 Bronze v0.1](https://img.shields.io/badge/Gate-🟤%20Bronze%20v0.1-%23cd7f32)](https://github.com/MYTHIK-blip/SWARMINT-AUTOPOIESIS/releases/tag/bronze-gate-v0.1)
 [![Branch: bronze (frozen)](https://img.shields.io/badge/Branch-bronze%20(frozen)-8a2be2)](https://github.com/MYTHIK-blip/SWARMINT-AUTOPOIESIS/tree/bronze)
 [![Default: main](https://img.shields.io/badge/Default-main-1f6feb)](https://github.com/MYTHIK-blip/SWARMINT-AUTOPOIESIS/tree/main)
-![Air-Gap Ready](https://img.shields.io/badge/Air–Gap-Ready-0b8f00)
+![Air--Gap Ready](https://img.shields.io/badge/Air–Gap-Ready-0b8f00)
 ![No Telemetry](https://img.shields.io/badge/Telemetry-None-lightgrey)
 ![Provenance: HMAC](https://img.shields.io/badge/Provenance-HMAC-important)
 ![Artifacts: Tarball+SHA256](https://img.shields.io/badge/Artifacts-Tarball%20%2B%20SHA256-555)
@@ -48,7 +48,7 @@
 
 ## 🧰 System Overview (As of 🟤 Bronze v0.1)
 
-![Scope](https://img.shields.io/badge/Scope-auth.log-555) ![Artifacts](https://img.shields.io/badge/Artifacts-JSONL%20%7C%20SQLite%20%7C%20Markdown-555) ![Provenance](https://img.shields.io/badge/Provenance-HMAC-important) ![Air-Gap](https://img.shields.io/badge/Air--Gap-Ready-0b8f00)
+![Scope](https://img.shields.io/badge/Scope-auth.log-555) ![Artifacts](https://img.shields.io/badge/Artifacts-JSONL%20%7C%20SQLite%20%7C%20Markdown-555) ![Provenance](https://img.shields.io/badge/Provenance-HMAC-important) ![Air--Gap](https://img.shields.io/badge/Air--Gap-Ready-0b8f00)
 
 **What it is.** A provenance-first, homeostatic SIEM embryo that runs locally, tolerates degraded conditions, and outputs tamper-evident artifacts.
 
@@ -164,7 +164,7 @@ Legend: ✅ done • ⬜ planned for that gate • 💎 apex
 - **Swarm under constraint** → minimal deps, air-gap rituals, deterministic restore  
 - **Comb discipline** → immutable rollback lines + deliberate promotions
 
-~~~mermaid
+```mermaid
 flowchart TD
   V[Hive Values] --> P[Provenance]
   V --> H[Homeostasis]
@@ -174,7 +174,7 @@ flowchart TD
   H --> F[FRI Bands]
   R --> M[Minimal Deps]
   G --> L[Branch + Tag + Release]
-~~~
+```
 
 ---
 
@@ -184,7 +184,7 @@ flowchart TD
 
 **Narrative:** Logs are nectar. We filter, classify, sign, then concentrate into honey (intel) you can actually spread.
 
-~~~mermaid
+```mermaid
 flowchart LR
   subgraph Meadow_Inflow ["Meadow (Inflow)"]
     A["data/raw/auth.log"]
@@ -199,7 +199,7 @@ flowchart LR
   F --> H["Honey Report"]
   G --> H
   H --> I["data/reports/report_*.md"]
-~~~
+```
 
 **Local vaults (git-ignored)**
 ~~~text
@@ -399,7 +399,7 @@ chmod 600 ops/secret.key
 ![Discipline](https://img.shields.io/badge/Policy-Immutable%20Bronze-8a2be2)
 ![Flow](https://img.shields.io/badge/Flow-Feature%E2%86%92PR%E2%86%92Main-1f6feb)
 
-~~~mermaid
+```mermaid
 flowchart LR
   subgraph Rollback Comb
     T[(Tag: bronze-gate-v0.1)]
@@ -412,7 +412,7 @@ flowchart LR
     S --> M
   end
   B --> M
-~~~
+```
 
 **Contract**
 - `bronze` = immutable rollback branch (no direct commits; no force-push)  
@@ -427,14 +427,14 @@ flowchart LR
 ![Then: Gold](https://img.shields.io/badge/Then-Gold-🟡)
 ![Apex: Diamond](https://img.shields.io/badge/Apex-Diamond-💎)
 
-~~~mermaid
+```mermaid
 stateDiagram-v2
   [*] --> Bronze: Embryo comb sealed
   Bronze --> Silver: Smoke test • Metrics • CI • Packs
   Silver --> Gold: Packaging • Parsers • SBOM • Signed releases
   Gold --> Diamond: Governance • Mutation ledger • HITL console
   Diamond --> [*]
-~~~
+```
 
 ---
 
