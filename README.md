@@ -14,7 +14,6 @@
 
 ---
 ## 🧭 Table of Contents
-
 - [Bronze Promotion Capsule](#-bronze-promotion-capsule)
 - [Quickstart (Nectar in 60s)](#-quickstart-nectar-in-60s)
 - [Feature Hive (Gates)](#-feature-hive-gates)
@@ -23,17 +22,22 @@
 - [Release Artifacts (Tarball Discipline)](#-release-artifacts-tarball-discipline)
 - [Observability (Silver · Smoke Path)](#-observability-silver--smoke-path)
 - [Security & Provenance Posture](#-security--provenance-posture)
-- [Branch & Tag Topology (Hive Roles)](#-branch--tag-topology-hive-roles)
-- [Roadmap (Foraging Seasons)](#-roadmap-foraging-seasons)
-- [Operator Crib (Keeper Tools)](#-operator-crib-keeper-tools)
-- [Repo Layout (Comb Map)](#-repo-layout-comb-map)
-- [Performance & Limits (Thermal Range)](#-performance--limits-thermal-range)
-- [Failure Modes (Swarm Alarms)](#-failure-modes-swarm-alarms)
-- [Non-Goals (Not This Hive)](#-non-goals-not-this-hive)
 - [Threat Model & Trust Boundaries](#-threat-model--trust-boundaries)
 - [FRI — Definition & Tuning](#-fri-fracture-readiness-index--definition--tuning)
 - [metrics.json (Silver Smoke) — v0.2](#-metricsjson-silver-smoke--v02)
 - [Vectors & Use Cases (Expanded)](#-vectors--use-cases-expanded)
+- [Attack Surface & Vectors](#-attack-surface--vectors)
+- [Telemetry Ontology](#-telemetry-ontology)
+- [Team Modes (Blue • Purple • Red • Honey)](#-team-modes-blue--purple--red--honey)
+- [OPSEC & Handling](#-opsec--handling)
+- [Alert Quality & SLOs](#-alert-quality--slos)
+- [Config Profiles](#-config-profiles)
+- [Data Retention & Privacy](#-data-retention--privacy)
+- [Sample Report Snip](#-sample-report-snip)
+- [Repo Layout (Comb Map)](#-repo-layout-comb-map)
+- [Performance & Limits (Thermal Range)](#-performance--limits-thermal-range)
+- [Failure Modes (Swarm Alarms)](#-failure-modes-swarm-alarms)
+- [Non-Goals (Not This Hive)](#-non-goals-not-this-hive)
 - [References (Curated)](#-references-curated)
 - [Funding & Research](#-funding--research)
 - [Contributing (Bee Dance)](#-contributing-bee-dance)
@@ -701,7 +705,4 @@ Resilient, **air-gap-friendly** telemetry with tamper-evident artifacts and clea
 **How to cite**
 See the **Cite (Bronze)** BibTeX in the License section. A “Cite (Silver)” entry will accompany the next promotion.
 
----
----
----
 ---
