@@ -1,989 +1,483 @@
-<p align="center">
-  <img src="https://img.shields.io/badge/Gate-🟤%20Bronze%20v0.1-%23cd7f32" alt="Gate Bronze">
-  <a href="https://github.com/MYTHIK-blip/SWARMINT-AUTOPOIESIS/releases/tag/bronze-gate-v0.1">
-    <img src="https://img.shields.io/badge/Release-bronze--gate--v0.1-1f6feb" alt="Release">
-  </a>
-  <img src="https://img.shields.io/badge/Branch-bronze%20(frozen)-8a2be2" alt="bronze branch">
-  <img src="https://img.shields.io/badge/Python-3.11%2B-3776ab?logo=python&logoColor=white" alt="python">
-  <img src="https://img.shields.io/badge/Mode-Air--Gap%20Ready-0b8f00" alt="Air Gap Ready">
-  <img src="https://img.shields.io/badge/Provenance-HMAC%20per%20event-111111" alt="Provenance">
-  <img src="https://img.shields.io/badge/License-MIT-blue" alt="License">
-</p>
+# 🐝🍯 **SWARMINT · AUTOPOIESIS** — *Hive-Born SIEM* 🍯🐝
+> **Signal that survives noise.**  
+> Honeycomb-themed, operator-first security telemetry: *forage* the logs, *filter* the noise, *seal* with provenance, *pour* honey (intel).
 
-<h1 align="center">SWARMINT · AUTOPOIESIS <span title="Hive-grade posture">🐝</span></h1>
-<p align="center"><b>Provenance-first, homeostatic SIEM embryo</b><br/>
-<i>Built for degraded reality — keep signal alive under noise.</i></p>
+[![Gate: 🟤 Bronze v0.1](https://img.shields.io/badge/Gate-🟤%20Bronze%20v0.1-%23cd7f32)](https://github.com/MYTHIK-blip/SWARMINT-AUTOPOIESIS/releases/tag/bronze-gate-v0.1)
+[![Branch: bronze (frozen)](https://img.shields.io/badge/Branch-bronze%20(frozen)-8a2be2)](https://github.com/MYTHIK-blip/SWARMINT-AUTOPOIESIS/tree/bronze)
+[![Default: main](https://img.shields.io/badge/Default-main-1f6feb)](https://github.com/MYTHIK-blip/SWARMINT-AUTOPOIESIS/tree/main)
+![Air-Gap Ready](https://img.shields.io/badge/Air–Gap-Ready-0b8f00)
+![No Telemetry](https://img.shields.io/badge/Telemetry-None-lightgrey)
+![Provenance: HMAC](https://img.shields.io/badge/Provenance-HMAC-important)
+![Artifacts: Tarball+SHA256](https://img.shields.io/badge/Artifacts-Tarball%20%2B%20SHA256-555)
+![Python 3.11+](https://img.shields.io/badge/Python-3.11%2B-3776ab?logo=python&logoColor=white)
+![License: MIT](https://img.shields.io/badge/License-MIT-blue)
 
-<p align="center">
-  <sub>
-    <a href="#-tldr">Quickstart</a> •
-    <a href="#-ethos">Ethos</a> •
-    <a href="#%EF%B8%8F-architecture">Architecture</a> •
-    <a href="#-data--artifacts">Artifacts</a> •
-    <a href="#-security--provenance">Security</a> •
-    <a href="#%EF%B8%8F-rollback--disaster-recovery">Rollback</a> •
-    <a href="#-branch--tag-topology">Branches & Tags</a> •
-    <a href="#-gates--roadmap">Gates</a> •
-    <a href="#-operator-crib-copypaste">Operator Crib</a> •
-    <a href="#-repo-layout">Repo Layout</a> •
-    <a href="#-real-world-uses">Use Cases</a> •
-    <a href="#-contributing">Contributing</a>
-  </sub>
-</p>
+---
 
-<hr/>
+## 🐝 **Bronze Promotion Capsule**
+![Status: Shipped](https://img.shields.io/badge/Status-Shipped-0b8f00)
+![Rollback Line](https://img.shields.io/badge/Rollback-Line-555)
+![Release Hygiene](https://img.shields.io/badge/Release-Hardened-444)
 
-## ⚡ TL;DR
+- **State:** 🟤 *Bronze Gate v0.1 shipped* (immutable rollback line)  
+- **Pins:** **branch** `bronze` ↔ **tag** `bronze-gate-v0.1` (same SHA)  
+- **Artifacts:** curated **tarball** + **SHA256SUMS.txt** for deterministic air-gap restores  
+- **Active dev:** `main` (toward **Silver · Smoke**)  
+- **README:** enterprise-style, operator-first, mermaid diagrams, copy/paste blocks
 
-```bash
-# Clone (SSH)
-git clone git@github.com:MYTHIK-blip/SWARMINT-AUTOPOIESIS.git
+**Verify the pins**
+~~~bash
+git fetch --all --tags
+git rev-parse bronze-gate-v0.1^{}
+git rev-parse origin/bronze
+git rev-parse bronze
+# ⤷ All three SHAs must match at Bronze
+~~~
+
+**Air-gap restore (release tarball)**
+~~~bash
+sha256sum -c SHA256SUMS.txt
+tar -xzf SWARMINT-AUTOPOIESIS_bronze-gate-v0.1_src.tar.gz
 cd SWARMINT-AUTOPOIESIS
-bash
-Copy code
-# Run the Bronze embryo (with synthetic data)
 python -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt || true
-python -u scripts/sample_data.py
 bash scripts/run_embryo.sh
-bash
-Copy code
-# Inspect artifacts
-ls -lh data/processed/events.jsonl data/processed/anomalies.jsonl data/processed/fri.json
+~~~
+
+---
+
+## ⚡ **Quickstart (Nectar in 60s)**
+![DX: Friendly](https://img.shields.io/badge/DX-Friendly-1f6feb)
+![Mode: Embryo](https://img.shields.io/badge/Mode-Embryo-8a2be2)
+![Scope: auth.log](https://img.shields.io/badge/Scope-auth.log-555)
+
+~~~bash
+# 🐝 Clone the hive
+git clone git@github.com:MYTHIK-blip/SWARMINT-AUTOPOIESIS.git
+cd SWARMINT-AUTOPOIESIS
+
+# 🍯 Prime the hive
+python -m venv .venv && source .venv/bin/activate
+pip install -r requirements.txt || true
+
+# 🧪 Forage synthetic nectar
+python -u scripts/sample_data.py
+
+# 🔎 Spin the centrifuge (embryo run)
+bash scripts/run_embryo.sh
+
+# 📦 Skim the honey (artifacts)
+ls -lh data/processed/{events.jsonl,anomalies.jsonl,fri.json}
 ls -lh data/reports/
-Bronze is frozen at branch bronze and tag bronze-gate-v0.1.
-For air-gap restores, use the curated tarball + SHA256SUMS.txt from the Release.
+~~~
 
-## 🧠 Ethos
+---
 
-<p>
-  <img src="https://img.shields.io/badge/Provenance-First-111111" alt="Provenance First">
-  <img src="https://img.shields.io/badge/Homeostasis-FRI-0b8f00" alt="Homeostasis FRI">
-  <img src="https://img.shields.io/badge/Degenerate--Friendly-Minimal%20Deps-1f6feb" alt="Degenerate Friendly">
-  <img src="https://img.shields.io/badge/Change%20Control-Immutable%20Gates-8a2be2" alt="Immutable Gates">
-</p>
+## 🍯 **Feature Hive (Gates)**
+![Matrix](https://img.shields.io/badge/View-Feature%20Matrix-0b8f00)
+![Next Gate: Silver · Smoke](https://img.shields.io/badge/Next%20Gate-Silver%20·%20Smoke-999)
 
-- **Provenance > spectacle** — every event is HMAC-signed + sha256’d.
-- **Homeostasis as signal** — FRI (Fracture Readiness Index) tracks posture bands.
-- **Degraded-reality ready** — minimal deps; deterministic restore; air-gap friendly.
-- **Gates, not guesses** — releases + rollback branches you can *trust*.
+| Comb | Bronze | Silver | Gold | Diamond | Nectar Note |
+|---|:---:|:---:|:---:|:---:|---|
+| `auth.log` ingest | ✅ |  |  |  | One-shot runner |
+| PvP / PvE / Unknown | ✅ | ⬜ |  |  | Packs + reclass arrive in Silver |
+| HMAC per event | ✅ |  |  |  | Local key in `ops/secret.key` |
+| FRI (band + value) | ✅ |  |  |  | Green / Yellow / Orange / Red |
+| `metrics.json` | ⬜ | ✅ |  |  | Counts, FRI, input SHA, git rev |
+| CI (ruff/mypy/pytest) | ⬜ | ✅ |  |  | Enforced on PRs (badges visible) |
+| Parsers: journald/ufw/nginx |  |  | ✅ |  | Config-driven |
+| SBOM + signed releases |  |  | ✅ |  | Supply-chain posture |
+| Governance + mutation ledger |  |  |  | 💎 | Provenance lineage + HITL |
 
-```mermaid
+Legend: ✅ done • ⬜ planned for that gate • 💎 apex
+
+---
+
+## 🧠 **Hive Ethos (Principles → Practices)**
+![Provenance](https://img.shields.io/badge/Provenance-Signed%20Events-important)
+![Homeostasis](https://img.shields.io/badge/Signal-Homeostasis-ffb300)
+![Resilience](https://img.shields.io/badge/Resilience-Degraded%20Reality-555)
+
+- **Forage with provenance** → per-event `sha256` + **HMAC** seals  
+- **Keep the brood warm** → **FRI** compresses ambient risk to a posture band  
+- **Swarm under constraint** → minimal deps, air-gap rituals, deterministic restore  
+- **Comb discipline** → immutable rollback lines + deliberate promotions
+
+~~~mermaid
 flowchart TD
-  A[Values] --> P[Provenance]
-  A --> H[Homeostasis]
-  A --> D[Degenerate<br/>Friendly]
-  A --> G[Immutable Gates]
-  P --> E[HMAC per event]
-  H --> F[FRI bands]
-  D --> M[Pure Python]
-  G --> R[Tag + Release + Rollback]
+  V[Hive Values] --> P[Provenance]
+  V --> H[Homeostasis]
+  V --> R[Resilience]
+  V --> G[Gated Promotions]
+  P --> E[Per-Event HMAC]
+  H --> F[FRI Bands]
+  R --> M[Minimal Deps]
+  G --> L[Branch + Tag + Release]
+~~~
 
-<details> <summary><b>Principles → Practices (open)</b></summary>
+---
 
-Provenance → HMAC key in <code>ops/secret.key</code> (never committed); JSONL carries checksums.
+## 🧱 **Honeycomb Architecture (Bronze Snapshot)**
+![Dataflow](https://img.shields.io/badge/Diagram-Dataflow-1f6feb)
+![Artifacts](https://img.shields.io/badge/Artifacts-JSONL%20%7C%20SQLite%20%7C%20Markdown-555)
 
-Homeostasis → <code>fri.json</code> emits value + band (Green/Yellow/Orange/Red) for quick posture calls.
+**Narrative:** Logs are nectar. We filter, classify, sign, then concentrate into honey (intel) you can actually spread.
 
-Degraded-friendly → one-shot runner (<code>scripts/run_embryo.sh</code>), SQLite catalog, release tarball.
-
-Immutable gates → tag <code>bronze-gate-v0.1</code> and branch <code>bronze</code> are the rollback line.
-
-</details> ```
-
-## ⚙️ Architecture
-
-<p>
-  <img src="https://img.shields.io/badge/Pipeline-Ingest→Classify→Prove→Store→Detect→Assess→Report-111111" alt="Pipeline">
-  <img src="https://img.shields.io/badge/FRI-Homeostasis-0b8f00" alt="FRI">
-  <img src="https://img.shields.io/badge/Artifacts-JSONL%20%7C%20SQLite%20%7C%20Markdown-1f6feb" alt="Artifacts">
-</p>
-
-- **Ingest** `auth.log` → normalize tokens.  
-- **Classify** → *PvP / PvE / Unknown*.  
-- **Provenance** → HMAC + SHA256 per event.  
-- **Store** → `events.jsonl` + `catalog.db` (SQLite).  
-- **Detect** → `anomalies.jsonl`.  
-- **Assess** → `fri.json` (value + band).  
-- **Report** → human-readable Markdown.
-
-```mermaid
+~~~mermaid
 flowchart LR
-  subgraph Input
+  subgraph Meadow [Inflow]
     A[ data/raw/auth.log ]
   end
-
-  A --> B[ scripts/ingest.py<br/>parse + normalize ]
-  B --> C{ classify<br/>PvP | PvE | Unknown }
-  C --> D[ provenance<br/>HMAC + sha256 ]
-  D --> E[ persist<br/>events.jsonl + catalog.db ]
-  E --> F[ anomalies.jsonl ]
-  E --> G[ scripts/fri.py → fri.json ]
-  F --> H[ scripts/report.py ]
+  A --> B[Filter & Normalize]
+  B --> C{Classify<br/>PvP • PvE • Unknown}
+  C --> D[Seal with Wax<br/>(sha256 + HMAC)]
+  D --> E[Comb Cells<br/>events.jsonl • catalog.db]
+  E --> F[Detect Spoilage → anomalies.jsonl]
+  E --> G[Brood Temp → fri.json]
+  F --> H[Honey Report]
   G --> H
-  H --> I[ data/reports/report_*.md ]
+  H --> I[data/reports/report_*.md]
+~~~
 
-Legend
-
-Ingest = parse & normalize auth records
-
-Provenance = HMAC (secret in ops/secret.key) + SHA256
-
-Assess = FRI posture (Green/Yellow/Orange/Red)
-
-<details> <summary><b>Execution path & runners</b></summary>
-
-Primary runner: <code>bash scripts/run_embryo.sh</code>
-
-Direct pieces: <code>scripts/ingest.py</code>, <code>scripts/fri.py</code>, <code>scripts/report.py</code>
-
-Synthetic input: <code>scripts/sample_data.py</code> (safe for demos)
-
-State lands under <code>data/</code> (ignored by Git)
-
-</details> ```
-
-## 📦 Data & Artifacts
-
-<p>
-  <img src="https://img.shields.io/badge/Formats-JSONL%20%7C%20SQLite%20%7C%20Markdown-1f6feb" alt="Formats">
-  <img src="https://img.shields.io/badge/Integrity-HMAC%20%2B%20SHA256-111111" alt="Integrity">
-  <img src="https://img.shields.io/badge/Vault-Local%20(data%2F)-0b8f00" alt="Vault">
-</p>
-
+**Local vaults (git-ignored)**
+~~~text
 data/
-raw/
-auth.log
-processed/
-events.jsonl # signed events (sha256 + hmac)
-anomalies.jsonl # detector findings
-fri.json # homeostasis index (value + band)
-catalog.db # SQLite catalog (local vault)
-reports/
-report_YYYY-MM-DD_HHMMSS.md
+  raw/auth.log
+  processed/{events.jsonl, anomalies.jsonl, fri.json, catalog.db}
+  reports/report_YYYY-MM-DD_HHMMSS.md
+ops/secret.key   # HMAC key (NEVER commit)
+~~~
 
-- `events.jsonl` — one event per line; includes `sha256` and `hmac` for provenance.  
-- `anomalies.jsonl` — detector outputs with references back to event ids/hashes.  
-- `fri.json` — aggregate posture (`fri` float + band: Green/Yellow/Orange/Red).  
-- `catalog.db` — local SQLite for quick exploratory queries (not for long-term storage).  
-- `reports/*.md` — human-readable situational summary for operators.
+---
 
-> `data/` is **ignored by Git** to prevent leakage of real logs or derived vaults.
+## 🧰 **Release Artifacts (Tarball Discipline)**
+![Releases](https://img.shields.io/badge/Release-Tarball%20%2B%20Checksums-0b8f00)
+![Reproducible](https://img.shields.io/badge/Reproducible-Yes-555)
 
-<details>
-<summary><b>Event (JSONL excerpt)</b></summary>
+- **Why tarball?** Reproducible hand-offs; deterministic restore; audit-friendly.  
+- **What’s inside?** Source snapshot + pinned config; verify with `SHA256SUMS.txt`.  
+- **How it complements apps?** Any downstream tool (dashboard, CLI, USB kit) can **trust the source** and redeploy without the network.
 
-```json
+**Verify + restore**
+~~~bash
+sha256sum -c SHA256SUMS.txt
+tar -xzf SWARMINT-AUTOPOIESIS_bronze-gate-v0.1_src.tar.gz
+# ⤷ same results anywhere, even without Internet
+~~~
+
+---
+
+## 👁️ **Observability (Silver · Smoke Path)**
+![Metrics](https://img.shields.io/badge/metrics.json-Planned%20%F0%9F%94%A5-ffb300)
+![CI](https://img.shields.io/badge/CI-ruff%20%7C%20mypy%20%7C%20pytest-1f6feb)
+
+**Goal:** A single **`metrics.json`** every run; humans glance, machines ingest.
+
+~~~json
 {
-  "ts": "2025-08-30T08:12:34Z",
-  "host": "node-01",
-  "facility": "auth",
-  "severity": "notice",
-  "classifier": "PvP",
-  "sha256": "3f0d…",
-  "hmac": "a91c…",
-  "raw": "sshd[1234]: Failed password for invalid user test from 203.0.113.10 port 51234 ssh2"
+  "ts_utc": "2025-09-01T09:00:00Z",
+  "git_rev": "dc99fd5",
+  "input_sha256": "b3c1...f0a2",
+  "counts": { "events": 4217, "anomalies": 32, "pvp": 19, "pve": 4178, "unknown": 20 },
+  "fri": { "value": 0.62, "band": "Yellow" }
 }
-</details> <details> <summary><b>FRI (example)</b></summary>
+~~~
 
-{ "fri": 0.62, "band": "Yellow" }
-</details> <details> <summary><b>SQLite quick look (catalog.db)</b></summary>
+~~~bash
+jq '.counts, .fri' data/processed/metrics.json
+~~~
 
-sqlite3 data/processed/catalog.db \
-  "SELECT ts, host, classifier FROM events ORDER BY ts DESC LIMIT 10;"
-</details>
-Provenance fields
+**Silver exit criteria**
+- `metrics.json` emitted per run (schema stable)  
+- CI gate on PRs: ruff + mypy + pytest (badges in README)  
+- Classifier packs MVP + reclass history  
+- Rollback invariants preserved
 
-sha256 — content checksum of canonicalized event payload.
+---
 
-hmac — keyed MAC using ops/secret.key (generated locally, never committed).
+## 🛡️ **Security & Provenance Posture**
+![Secrets](https://img.shields.io/badge/Secret-Local%20Key-444)
+![Tamper-evident](https://img.shields.io/badge/Tamper-evident-Yes-0b8f00)
+![Supply Chain](https://img.shields.io/badge/Supply%20Chain-Gold%20Scope-999)
 
-# one-time local key
-mkdir -p ops && openssl rand -hex 32 > ops/secret.key && chmod 600 ops/secret.key
+- **Per-event seals:** sha256 + **HMAC** on canonicalized payloads  
+- **Key handling:** `ops/secret.key` is local only (`chmod 600`); rotate on exposure  
+- **Supply chain roadmap:** SBOM + signed tags/releases (Gold), attestations later
 
-## 🔐 Security & Provenance
-
-<p>
-  <img src="https://img.shields.io/badge/Provenance-HMAC%20%2B%20SHA256-111111" alt="Provenance">
-  <img src="https://img.shields.io/badge/Secrets-Never%20Commit-cc0000" alt="Never Commit">
-  <img src="https://img.shields.io/badge/Rollback-Immutable%20Gates-8a2be2" alt="Immutable Gates">
-  <img src="https://img.shields.io/badge/Air--Gap-Ready-0b8f00" alt="Air Gap Ready">
-</p>
-
-- **HMAC per event** — each canonicalized event is checksummed (sha256) and signed (HMAC).  
-- **Key stays local** — `ops/secret.key` is **generated on the node**, ignored by Git.  
-- **No data leakage** — `data/` vaults + reports are ignored; do not commit real logs.  
-- **Release hygiene** — curated tarball + `SHA256SUMS.txt` for deterministic restore.  
-- **Gates** — `bronze` branch + `bronze-gate-v0.1` tag are the immutable rollback line.
-
-<details>
-<summary><b>Generate / rotate HMAC key</b></summary>
-
-```bash
-# one-time key (local only)
-mkdir -p ops
+**Generate/rotate key**
+~~~bash
+mkdir -p ops && umask 077
 openssl rand -hex 32 > ops/secret.key
 chmod 600 ops/secret.key
+~~~
 
-# rotate on suspicion (invalidate old reports downstream if needed)
-mv ops/secret.key ops/secret.key.old.$(date +%Y%m%d%H%M%S)
-openssl rand -hex 32 > ops/secret.key && chmod 600 ops/secret.key
+---
 
-# (optional) record a non-secret key identifier (e.g., sha256 of key file) in ops/run-record.json
-python - <<'PY'
-import hashlib, json, pathlib, time
-p=pathlib.Path("ops/secret.key")
-kid=hashlib.sha256(p.read_bytes()).hexdigest()[:12]
-rr=pathlib.Path("ops/run-record.json")
-rec={"hmac_kid":kid,"rotated_at":time.strftime("%FT%TZ",time.gmtime())}
-rr.write_text(json.dumps(rec, indent=2)+"\n")
-print("KID:", kid)
-PY
-</details> <details> <summary><b>Secret scanning (local)</b></summary>
+## 🌳 **Branch & Tag Topology (Hive Roles)**
+![Discipline](https://img.shields.io/badge/Policy-Immutable%20Bronze-8a2be2)
+![Flow](https://img.shields.io/badge/Flow-Feature%E2%86%92PR%E2%86%92Main-1f6feb)
 
-# run pre-commit hooks (includes detect-secrets baseline)
-pre-commit run --all-files || true
-
-# update / audit the baseline if needed
-detect-secrets scan > .secrets.baseline
-detect-secrets audit .secrets.baseline
-Spot-check history
-
-# look for accidental additions of known secret paths / patterns
-git log -p -- ops/secret.key || true
-git log -G 'BEGIN PRIVATE KEY|password|token' -- . || true
-</details> <details> <summary><b>If a secret ever leaked in history</b></summary>
-
-# 1) Rotate keys immediately (see rotate block), redeploy artifacts
-# 2) Remove from history (choose one tool)
-pipx install git-filter-repo  # or: brew install git-filter-repo
-
-git filter-repo --path ops/secret.key --invert-paths
-git push --force-with-lease origin main
-
-# 3) Invalidate downstream reports produced with the old key
-# 4) Announce rotation scope in SECURITY.md / Release notes
-</details> <details> <summary><b>Supply chain hardening (next gates)</b></summary>
-Signed tags & releases (GPG/SSH) + git verify-tag in operator runbooks.
-
-SBOM for Python deps at release time.
-
-Branch protections: disallow force-push to main & bronze, require PR checks.
-
-</details>
-.gitignore (already present, key lines)
-
-# secrets
-ops/secret.key
-
-# local vaults / artifacts
-/data/
-/dist/
-/.venv/
-/.mypy_cache/
-/.pytest_cache/
-/.ruff_cache/
-## 🛡️ Rollback & Disaster Recovery
-
-<p>
-  <img src="https://img.shields.io/badge/Rollback-Immutable%20Branch-8a2be2" alt="Immutable">
-  <img src="https://img.shields.io/badge/Release-Tarball%20%2B%20SHA256SUMS-111111" alt="Tarball">
-  <img src="https://img.shields.io/badge/Air--Gap-Ready-0b8f00" alt="Air Gap">
-</p>
-
-<details>
-<summary><b>Fast dev rollback — frozen branch</b></summary>
-
-```bash
-git fetch --all --tags
-git switch bronze
-</details> <details> <summary><b>Deterministic restore — verified tarball (air-gap)</b></summary>
-Download from the Bronze Release:
-
-SWARMINT-AUTOPOIESIS_bronze-gate-v0.1_src.tar.gz
-
-SHA256SUMS.txt
-
-sha256sum -c SHA256SUMS.txt
-tar -xzf SWARMINT-AUTOPOIESIS_bronze-gate-v0.1_src.tar.gz
-cd SWARMINT-AUTOPOIESIS
-python -m venv .venv && source .venv/bin/activate
-pip install -r requirements.txt || true
-bash scripts/run_embryo.sh
-</details> <details> <summary><b>Pin exact Bronze tag (detached)</b></summary>
-
-git fetch --all --tags
-git switch --detach bronze-gate-v0.1
-</details> <details> <summary><b>Verify rollback line (all SHAs should match)</b></summary>
-
-git rev-parse bronze-gate-v0.1^{}
-git rev-parse origin/bronze
-git rev-parse bronze
-</details> <details> <summary><b>Disaster drill (clean room)</b></summary>
-
-# clone to a new working dir
-git clone --branch bronze --single-branch git@github.com:MYTHIK-blip/SWARMINT-AUTOPOIESIS.git SWARMINT-AUTOPOIESIS-EMBRYO
-cd SWARMINT-AUTOPOIESIS-EMBRYO
-python -m venv .venv && source .venv/bin/activate
-pip install -r requirements.txt || true
-python -u scripts/sample_data.py
-bash scripts/run_embryo.sh
-</details> ```
-
-## 🌳 Branch & Tag Topology
-
-<p>
-  <img src="https://img.shields.io/badge/Default-main-1f6feb" alt="main">
-  <img src="https://img.shields.io/badge/Rollback-bronze%20(frozen)-8a2be2" alt="bronze">
-  <img src="https://img.shields.io/badge/ReleaseTag-bronze--gate--v0.1-%23cd7f32" alt="tag">
-</p>
-
-```mermaid
+~~~mermaid
 flowchart LR
-  subgraph Bronze Line (Rollback)
-    T[(tag: bronze-gate-v0.1)]
-    B[(branch: bronze)]
+  subgraph Rollback Comb
+    T[(Tag: bronze-gate-v0.1)]
+    B[(Branch: bronze)]
     T --- B
   end
-
-  subgraph Development
+  subgraph Foraging Grounds
     M[(main)]
-    S[(feature/* e.g., silver)]
+    S[(feature/* e.g., silver/*, docs/*)]
     S --> M
   end
-
   B --> M
-Contract
+~~~
 
-bronze = immutable rollback branch (no force-push; no direct commits).
+**Contract**
+- `bronze` = immutable rollback branch (no direct commits; no force-push)  
+- `bronze-gate-v0.1` = tag pointing to exact Bronze commit  
+- `main` = living trunk; feature work in `silver/*` or `docs/*` → PR → **squash** to `main`
 
-bronze-gate-v0.1 = release tag pointing to the exact Bronze commit.
+---
 
-main = active development (future gates originate here via PRs).
+## 🛣️ **Roadmap (Foraging Seasons)**
+![Now: Bronze](https://img.shields.io/badge/Now-Bronze-🟤)
+![Next: Silver Smoke](https://img.shields.io/badge/Next-Silver%20Smoke-⚪)
+![Then: Gold](https://img.shields.io/badge/Then-Gold-🟡)
+![Apex: Diamond](https://img.shields.io/badge/Apex-Diamond-💎)
 
-Feature branches (e.g. silver) → PR → squash merge into main.
-
-<details> <summary><b>Consistency checks</b></summary>
-
-# all should match the same SHA at Bronze
-git rev-parse bronze-gate-v0.1^{}
-git rev-parse origin/bronze
-git rev-parse bronze
-
-# show remote branches; confirm bronze exists and is tracking
-git ls-remote --heads origin | grep refs/heads/bronze
-
-# protect branches (recommended): in GitHub → Settings → Branches
-# - Protect 'main' (PRs + status checks once CI exists)
-# - Protect 'bronze' (no pushes; no force pushes)
-</details> ```
-
-## 🛣️ Gates & Roadmap
-
-<p>
-  <img src="https://img.shields.io/badge/Now-🟤%20Bronze%20v0.1-%23cd7f32" alt="Bronze">
-  <img src="https://img.shields.io/badge/Next-🥈%20Silver%20v0.2-1f6feb" alt="Silver">
-  <img src="https://img.shields.io/badge/Then-🥇%20Gold%20v0.3-ffd700" alt="Gold">
-  <img src="https://img.shields.io/badge/Target-💎%20Diamond%20v1.0-8a2be2" alt="Diamond">
-</p>
-
-```mermaid
+~~~mermaid
 stateDiagram-v2
-  [*] --> Bronze
-  Bronze --> Silver: Stability + Observability
-  Silver --> Gold: Packaging + Parsers + SBOM
-  Gold --> Diamond: Governance + Mutation + Lineage
+  [*] --> Bronze: Embryo comb sealed
+  Bronze --> Silver: Smoke test • Metrics • CI • Packs
+  Silver --> Gold: Packaging • Parsers • SBOM • Signed releases
+  Gold --> Diamond: Governance • Mutation ledger • HITL console
   Diamond --> [*]
-🟤 Bronze (v0.1) — ✅ Shipped
-Ingest → classify → HMAC → anomalies → FRI → JSONL/SQLite/Markdown
-Artifacts: release tag bronze-gate-v0.1, immutable branch bronze, tarball + SHA256SUMS.txt.
+~~~
 
-Exit criteria (met):
+---
 
- Immutable rollback branch & tag
+## 🧰 **Operator Crib (Keeper Tools)**
+![Runbooks](https://img.shields.io/badge/Runbooks-Copy%2FPaste-1f6feb)
 
- Deterministic tarball + checksums
-
- Readme & operator crib
-
- Basic tests & local pre-commit hygiene
-
-🥈 Silver (v0.2) — Stability & Observability
-Focus on signal visibility and operator ergonomics without expanding surface area.
-
-Planned scope:
-
-Metrics emitter → data/processed/metrics.json
-
-Totals: events, anomalies, PvP/PvE/Unknown counts
-
-FRI: value + band
-
-Build meta: git_rev, tag (if any), dataset_sha256 (auth.log)
-
-Minimal CI (GitHub Actions)
-
-On PRs to main: ruff + mypy + pytest -q
-
-On tags matching *-gate-*: run pipeline; attach report_*.md + metrics.json to Release
-
-Classifier “dict packs” (seedable rule dictionaries for auth failure heuristics)
-
-CLI polish (optional): python -m scripts.ingest / small wrapper swarmint
-
-Structured logs for pipeline steps (start/end + durations)
-
-Exit criteria (checklist):
-
- metrics.json produced by run_embryo.sh
-
- CI green on PRs (lint/type/test)
-
- Release workflow publishes metrics & report on *-gate-* tags
-
- README badges updated (CI, metrics)
-
-Milestone: Silver Smoke (mid-gate validation) → metrics + CI running on silver PR before full gate.
-
-🥇 Gold (v0.3) — Packaging & Integrity
-Make it deployable + auditable.
-
-Planned scope:
-
-Docker/Compose (single-service) for embryo
-
-Parsers for journalctl, ufw, nginx access/error
-
-Deception-input hooks (harmless canaries)
-
-SBOM at release (Python deps snapshot)
-
-Grafana/JSON dashboards (read-only posture view)
-
-Exit criteria:
-
- Image published (GHCR) + compose up
-
- SBOM attached to Release
-
- Parsers + dashboards documented
-
-💎 Diamond (v1.0) — Governance & Mutation
-Operate safely under change.
-
-Planned scope:
-
-Mutation budgets + ledger, provenance lineage across runs
-
-HITL triage console (operator review loop)
-
-Environment promotions (dev → staging → prod)
-
-Policy docs & response playbooks
-
-Exit criteria:
-
- Mutation ledger & lineage export
-
- Review console MVP
-
- Promotion policy + playbooks merged
-
-Now / Next / Later
-Now: Keep Bronze immutable; merge docs; prep Silver branch
-
-Next (Silver): metrics + CI + dict packs; tag silver-gate-v0.2
-
-Later (Gold+): containers, parsers, SBOM, dashboards → governance
-
-<details> <summary><b>Kick off Silver (optional; run when ready)</b></summary>
-
-# create a working branch for Silver
-git switch main
-git pull --ff-only
-git switch -c silver
-
-# (you'll add metrics + CI in this branch; open PR back to main)
-# sample PR command:
-# gh pr create -f -B main -t "feat(silver): metrics + minimal CI" -b "Adds metrics.json and CI (ruff/mypy/pytest); seeds dict packs."
-</details> ```
-
-## 🧰 Operator Crib (copy/paste)
-
-<p>
-  <img src="https://img.shields.io/badge/Mode-Operator--First-111111" alt="Operator">
-  <img src="https://img.shields.io/badge/Hygiene-Precommit%20%7C%20Lint%20%7C%20Test-1f6feb" alt="Hygiene">
-  <img src="https://img.shields.io/badge/DR-Branch%20%7C%20Tag%20%7C%20Tarball-8a2be2" alt="DR">
-</p>
-
-<details>
-<summary><b>Setup & run (Bronze embryo)</b></summary>
-
-```bash
-# clone & enter
-git clone git@github.com:MYTHIK-blip/SWARMINT-AUTOPOIESIS.git
-cd SWARMINT-AUTOPOIESIS
-
-# venv + deps
-python -m venv .venv && source .venv/bin/activate
-pip install -r requirements.txt || true
-
-# synthetic input + pipeline run
+**Run embryo with sample nectar**
+~~~bash
 python -u scripts/sample_data.py
 bash scripts/run_embryo.sh
-</details> <details> <summary><b>Inspect artifacts</b></summary>
+~~~
 
-ls -lh data/processed/events.jsonl data/processed/anomalies.jsonl data/processed/fri.json
-ls -lh data/reports/
+**Inspect honey**
+~~~bash
 head -n 3 data/processed/events.jsonl
-</details> <details> <summary><b>Git hygiene & branching</b></summary>
+cat data/processed/fri.json
+ls -lh data/reports/
+~~~
 
-# status (short) + current branch
-git status -sb
-
-# sync main, create a feature branch (e.g., silver)
-git switch main
-git pull --ff-only
-git switch -c silver
-</details> <details> <summary><b>Rollback verification (Bronze line)</b></summary>
-
-git fetch --all --tags
-git rev-parse bronze-gate-v0.1^{}
-git rev-parse origin/bronze
-git rev-parse bronze
-# Expect all three SHAs to match (immutable rollback line)
-</details> <details> <summary><b>Tarball pack + checksums (deterministic release)</b></summary>
-
-mkdir -p dist
-git archive --format=tar.gz --output="dist/SWARMINT-AUTOPOIESIS_bronze-gate-v0.1_src.tar.gz" bronze-gate-v0.1
-( cd dist && sha256sum SWARMINT-AUTOPOIESIS_bronze-gate-v0.1_src.tar.gz > SHA256SUMS.txt )
-
-# verify later / elsewhere
-cd dist && sha256sum -c SHA256SUMS.txt
-</details> <details> <summary><b>Release attach (GitHub CLI)</b></summary>
-
-# create release if missing
-gh release view bronze-gate-v0.1 >/dev/null 2>&1 || \
-  gh release create bronze-gate-v0.1 \
-    --title "🟤 Bronze Gate v0.1 — SIEM embryo" \
-    --notes "Auth.log ingest → PvP/PvE/Unknown → HMAC → anomalies → FRI → JSONL/SQLite/Markdown."
-
-# upload artifacts (clobber to overwrite)
-gh release upload bronze-gate-v0.1 \
-  dist/SWARMINT-AUTOPOIESIS_bronze-gate-v0.1_src.tar.gz \
-  dist/SHA256SUMS.txt --clobber
-</details> <details> <summary><b>Pre-commit + QA sweep</b></summary>
-
-# run all hooks (ruff-format, ruff, mypy, tests, detect-secrets)
-pre-commit install
-pre-commit run --all-files || true
-
-# manual checks
-ruff check .
-mypy .
-pytest -q || true
-</details> <details> <summary><b>Safe workspace cleaning (preview → execute)</b></summary>
-
-# preview ignored-file cleanup (SAFE: does not touch tracked files)
-git clean -nfdX -e ops/secret.key
-
-# execute only if the preview looks correct
-git clean -fdX -e ops/secret.key
-</details> <details> <summary><b>PR merge (squash) + clean branch</b></summary>
-
-# squash & delete the source branch after merge
-gh pr merge <NUMBER> --squash --delete-branch \
-  --subject "docs: master README (enterprise + arcade UX, Bronze→Silver runway)" \
-  --body "Docs-only; DR playbooks, architecture diagrams, and operator crib."
-</details> <details> <summary><b>Dataset fingerprint (helpful for metrics)</b></summary>
-
+**Dataset fingerprint**
+~~~bash
 sha256sum data/raw/auth.log 2>/dev/null || echo "no local auth.log"
 git rev-parse --short HEAD
-</details> ```
+~~~
 
-## 🧭 Repo Layout
+---
 
-<p>
-  <img src="https://img.shields.io/badge/Layout-Operator%20Centric-111111" alt="Layout">
-  <img src="https://img.shields.io/badge/Vault-data%2F%20(ignored)-0b8f00" alt="Vault">
-  <img src="https://img.shields.io/badge/Scripts-Orchestrated-1f6feb" alt="Scripts">
-</p>
+## 📦 **Repo Layout (Comb Map)**
+![Layout](https://img.shields.io/badge/Layout-Operator%20Centric-0b8f00)
 
+~~~text
 config/
-process.yaml # pipeline knobs & defaults
-schema/
-event.schema.json # event payload invariants
-anomaly.schema.json # anomaly payload invariants
-
+  process.yaml
+  schema/
+    event.schema.json
+    anomaly.schema.json
 scripts/
-run_embryo.sh # one-shot pipeline runner
-ingest.py # parse + classify + sign (HMAC + sha256)
-fri.py # compute FRI (value + band)
-report.py # emit Markdown report
-sample_data.py # generate synthetic auth.log
-bronze_check.sh # light sanity checks (fsck/ruff/mypy/pytest)
-
-data/ # LOCAL VAULT (gitignored)
-raw/ # inputs (e.g., auth.log)
-processed/ # events.jsonl, anomalies.jsonl, catalog.db, fri.json
-reports/ # report_*.md
-
+  run_embryo.sh
+  ingest.py
+  fri.py
+  report.py
+  sample_data.py
+data/                 # LOCAL VAULT (gitignored)
+  raw/                #   inputs (e.g., auth.log)
+  processed/          #   events.jsonl, anomalies.jsonl, catalog.db, fri.json
+  reports/            #   report_*.md
 ops/
-run-record.json # optional run metadata (non-secret)
-secret.key # HMAC key (local, gitignored)
-
-tests/ # pytest: schemas + ingest
-
+  secret.key          # HMAC key (local only)
+tests/                # schemas + ingest checks
 .github/
-ISSUE_TEMPLATE/ # issue scaffolds (optional)
-
-(Silver) workflows/ci # ruff + mypy + pytest on PRs
-.pre-commit-config.yaml # local hygiene (ruff, mypy, tests, detect-secrets)
-.ruff.toml # lint rules
-.mypy.ini # type-check config
-requirements.txt # runtime deps
-README.md # you are here
-
-release artifacts (optional, gitignored locally)
-dist/
-SWARMINT-AUTOPOIESIS_bronze-gate-v0.1_src.tar.gz
-SHA256SUMS.txt
-
-<details>
-<summary><b>Why this structure?</b></summary>
-
-- **Separation of concerns** → code (`scripts/`), policy (`config/`), vault (`data/`), ops (`ops/`).
-- **Safe-by-default** → `data/` and `ops/secret.key` are excluded via `.gitignore`.
-- **Deterministic ops** → `dist/` holds curated release pack + checksums.
-- **Testable edges** → `tests/` validate schemas & ingest behavior.
-</details>
-
-🌍 Real-World Use Cases
-<p> <img src="https://img.shields.io/badge/Air--Gap-Ready-0b8f00" alt="Air Gap Ready"> <img src="https://img.shields.io/badge/Footprint-Low-111111" alt="Low Footprint"> <img src="https://img.shields.io/badge/Runs-Pure%20Python-3776ab?logo=python&logoColor=white" alt="Pure Python"> <img src="https://img.shields.io/badge/Restore-Deterministic%20Tarball-1f6feb" alt="Deterministic"> <img src="https://img.shields.io/badge/UX-Operator--First-8a2be2" alt="Operator-First"> </p>
-
-Sector map:
-<a href="#civic--government">Civic & Government</a> ·
-<a href="#critical-infrastructure--ot">Critical Infrastructure & OT</a> ·
-<a href="#smb--enterprise">SMB & Enterprise</a> ·
-<a href="#education--research">Education & Research</a> ·
-<a href="#incident-response--dfir">Incident Response & DFIR</a> ·
-<a href="#field--edge--austere">Field & Edge (Austere)</a> ·
-<a href="#healthcare--life-safety">Healthcare & Life Safety</a> ·
-<a href="#finance--finops--fincrime">Finance & FinOps / FinCrime</a> ·
-<a href="#elections--civic-trust">Elections & Civic Trust</a> ·
-<a href="#media--creative--newsrooms">Media, Creative & Newsrooms</a> ·
-<a href="#nonprofit--community-defense">Nonprofit & Community Defense</a> ·
-<a href="#cloud--soc-pipelines">Cloud & SOC Pipelines</a> ·
-<a href="#devsecops--sre-labs">DevSecOps & SRE Labs</a> ·
-<a href="#personal-lab--homelab">Personal Lab / Homelab</a>
-
-Civic & Government
-<details id="civic--government"><summary><b>🛡️ City / agency posture under budget + scrutiny</b></summary>
-
-Why SWARMINT
-
-Runs on existing Linux hosts; no new licensing or heavy infra.
-
-FRI gives executives a single posture dial (Green→Red) for briefings.
-
-Deploy (minimal)
-
-# on a bastion or audit node
-git clone --branch bronze --single-branch git@github.com:MYTHIK-blip/SWARMINT-AUTOPOIESIS.git
-cd SWARMINT-AUTOPOIESIS && python -m venv .venv && source .venv/bin/activate
-pip install -r requirements.txt || true
-sudo cp /var/log/auth.log data/raw/auth.log
-bash scripts/run_embryo.sh
-
-
-Signals to watch
-
-Spike in PvP classifications; FRI drifting Yellow→Orange.
-
-Repeated privileged auth failures from remote subnets.
-
-Silver+
-
-Add journalctl parser for service restarts; ufw for block trends.
-
-</details>
-Critical Infrastructure & OT
-<details id="critical-infrastructure--ot"><summary><b>⚙️ OT islands with strict change windows</b></summary>
-
-Why
-
-Air-gap restore from tarball; deterministic artifact trail.
-
-Operates in observation mode with minimal blast radius.
-
-Deploy (air-gap)
-
-sha256sum -c SHA256SUMS.txt
-tar -xzf SWARMINT-AUTOPOIESIS_bronze-gate-v0.1_src.tar.gz
-cd SWARMINT-AUTOPOIESIS && python -m venv .venv && source .venv/bin/activate
-pip install -r requirements.txt || true
-bash scripts/run_embryo.sh
-
-
-Signals
-
-Off-hours auth drift; lateral movement breadcrumbs; FRI band changes per shift.
-
-</details>
-SMB & Enterprise
-<details id="smb--enterprise"><summary><b>🏢 Fast posture readouts without SIEM overhauls</b></summary>
-
-Why
-
-Drop-in telemetry refinery feeding your existing tools (JSONL/SQLite/Markdown).
-
-Clear rollback branch (bronze) keeps auditors happy.
-
-Interop
-
-Silver: export metrics.json to log shipper; push to Loki/OTel gateway.
-
-</details>
-Education & Research
-<details id="education--research"><summary><b>🎓 Teaching detection + provenance thinking</b></summary>
-
-Why
-
-Pure Python; readable pipeline; reproducible runs for grading/research notes.
-
-Lab run
-
-python -u scripts/sample_data.py
-bash scripts/run_embryo.sh
-
-
-Assignments
-
-Extend classifier “dict packs”; design anomaly heuristics; reason about FRI & bias.
-
-</details>
-Incident Response & DFIR
-<details id="incident-response--dfir"><summary><b>🚑 Portable triage kit for captured logs</b></summary>
-
-Why
-
-Works in clean rooms; provenance trail (sha256 + HMAC) supports chain-of-custody.
-
-Workflow
-
-Import host auth.log snapshots → run → archive report_*.md + fri.json + metrics.json (Silver).
-
-</details>
-Field & Edge (Austere)
-<details id="field--edge--austere"><summary><b>🛰️ Low-power nodes; intermittent connectivity</b></summary>
-
-Why
-
-Minimal deps; resumable runs; markdown reports viewable offline.
-
-Tips
-
-Batch data/reports/ and sync when back in coverage.
-
-</details>
-Healthcare & Life Safety
-<details id="healthcare--life-safety"><summary><b>🏥 Conservative change control; staff under load</b></summary>
-
-Why
-
-Read-only posture signal (FRI) reduces cognitive load; keeps patient care first.
-
-Signals
-
-Privileged account anomalies; FRI excursions during shift changes.
-
-</details>
-Finance & FinOps / FinCrime
-<details id="finance--finops--fincrime"><summary><b>💳 Forensics-friendly artifacts; runbooks for audit</b></summary>
-
-Why
-
-Deterministic restore for audit recreations; attach reports to tickets & SAR trails.
-
-Silver
-
-CI verifies metrics on PR; attach artifacts to gate tags for audit packs.
-
-</details>
-Elections & Civic Trust
-<details id="elections--civic-trust"><summary><b>🗳️ Chain-of-custody focus; transparent posture</b></summary>
-
-Why
-
-Clear rollback + signed releases (Gold) → verifiable trust surface.
-
-Deploy
-
-Read-only collectors on pollbook servers; daily FRI deltas for command centers.
-
-</details>
-Media, Creative & Newsrooms
-<details id="media--creative--newsrooms"><summary><b>📰 Small teams; high-risk sources</b></summary>
-
-Why
-
-No-SaaS posture loop; can run on the same laptop as editorial tooling.
-
-Signals
-
-Remote auth attempts; sudden FRI spikes when embargoed content is staged.
-
-</details>
-Nonprofit & Community Defense
-<details id="nonprofit--community-defense"><summary><b>🧰 Safety co-ops; volunteer operators</b></summary>
-
-Why
-
-Simple copy/paste ops; Markdown reports share well across low-friction tools.
-
-Pattern
-
-One “honey node” per collective; nightly FRI + anomaly digest.
-
-</details>
-Cloud & SOC Pipelines
-<details id="cloud--soc-pipelines"><summary><b>☁️ Edge refinery → central lake</b></summary>
-
-Why
-
-Produce small, typed JSON for downstream enrichment; keep provenance attached.
-
-Silver+
-
-OTel exporter; Loki route; dashboards later at Gold.
-
-</details>
-DevSecOps & SRE Labs
-<details id="devsecops--sre-labs"><summary><b>🧪 Hypothesis-driven detection; reproducible</b></summary>
-
-Why
-
-Run the same pipeline locally and in CI; attach outputs to PRs.
-
-Snippet
-
-# quick smoke in CI (to wire later)
-ruff check .
-mypy .
-pytest -q || true
-
-</details>
-Personal Lab / Homelab
-<details id="personal-lab--homelab"><summary><b>🏠 Learn detections; protect your stack</b></summary>
-
-Run
-
-python -u scripts/sample_data.py
-bash scripts/run_embryo.sh
-
-
-Watch
-
-FRI across router/SSH boxes; unexpected logins from travel IPs.
-
-</details>
-
-## 🤝 Contributing
-
-<p>
-  <img src="https://img.shields.io/badge/Workflow-PRs%20%7C%20Squash-1f6feb" alt="PR Workflow">
-  <img src="https://img.shields.io/badge/Hygiene-Precommit%20%7C%20Lint%20%7C%20Type%20%7C%20Tests-0b8f00" alt="Hygiene">
-  <img src="https://img.shields.io/badge/Branches-Protected%20(main%2C%20bronze)-8a2be2" alt="Protected Branches">
-</p>
-
-**Branch rules**
-- `main` — protected; changes land via PRs (squash merge recommended).
-- `bronze` — immutable rollback line; **no direct commits, no force-push**.
-- Feature work → `feature/<topic>` (e.g., `silver`) → PR to `main`.
-
-**Commit emoji (suggested)**
-- ✨ feat · 🐛 fix · 📚 docs · ♻️ refactor · 🧪 test · 🧹 chore · 🔒 sec · ⚙️ ci
-
-<details>
-<summary><b>Local setup & hygiene</b></summary>
-
-```bash
-# venv + deps
-python -m venv .venv && source .venv/bin/activate
-pip install -r requirements.txt || true
-
-# pre-commit hooks (ruff-format, ruff, mypy, tests, detect-secrets)
-pre-commit install
-pre-commit run --all-files || true
-
-# manual checks
-ruff check .
-mypy .
-pytest -q || true
-</details> <details> <summary><b>Typical PR flow</b></summary>
-
-# sync & branch
-git switch main
-git pull --ff-only
-git switch -c feature/silver-metrics
-
-# work … then commit
-git add -A
-git commit -m "✨ feat(silver): emit metrics.json + basic counters"
-
-# push & open PR
+  ISSUE_TEMPLATE/     # optional; CI arrives in Silver
+.pre-commit-config.yaml
+.ruff.toml
+.mypy.ini
+requirements.txt
+README.md
+~~~
+
+---
+
+## ⚖️ **Performance & Limits (Thermal Range)**
+![Footprint](https://img.shields.io/badge/Footprint-Low-0b8f00)
+![Mode](https://img.shields.io/badge/Mode-Batch-555)
+![Scope](https://img.shields.io/badge/Scope-Single%20Host-999)
+
+- Low-footprint Bronze (pure Python) on modest VMs  
+- Batch pipeline (not a realtime daemon yet)  
+- Single-host focus across Bronze/Silver; multi-hive correlation later
+
+---
+
+## 🧯 **Failure Modes (Swarm Alarms)**
+![Playbooks](https://img.shields.io/badge/Playbooks-Short-1f6feb)
+
+- **Missing `ops/secret.key`** → HMAC absent → generate/rotate and rerun  
+- **No outputs** → wrong/empty input path → confirm `data/raw/auth.log`  
+- **No report** → check `logs/` & stderr → ensure runner completed  
+- **Render weird on GitHub** → ensure fences open/close; leave blank lines around lists/blocks
+
+---
+
+## 🚫 **Non-Goals (Not This Hive)**
+![Scope Guardrails](https://img.shields.io/badge/Scope-Guardrails-555)
+
+- Full EDR/SOAR replacement or deep endpoint forensics  
+- Realtime distributed SIEM correlation  
+- Cloud-only pipelines — this hive is **local-first / air-gap-friendly**
+
+---
+## 🌐 Vectors & Use Cases (Expanded)
+
+- 🏛️ **Civic / Gov** — Credential-stuffing & weak-password storms across council portals; summarize posture via **FRI band** + top anomalies; produce offline Markdown for governance packs.
+- 🧪 **DFIR / Incident Response** — Air-gapped triage of seized images: deterministic JSONL + SHA-pinned report enable chain-of-custody friendly briefs.
+- 🏥 **Healthcare** — Shift-change spikes (failed logins, lockouts) tracked to **Yellow/Orange FRI** without flooding NOC; artifact bundle suits on-call handover.
+- ⚙️ **OT / ICS edge** — SSH on gateway nodes; no network dependency; emit compact **metrics.json** for fleet dashboards later.
+- 🧰 **SME / Enterprise-lite** — Weekend brute spikes → owner-readable Markdown; “no vendor console required.”
+- ⛰️ **Field / Austere** — Runs from a USB in intermittent networks; reports readable offline.
+- 🎓 **Education / Labs** — Synthetic log corpus for “explain this report” exercises; compare detector flags against labeled windows.
+- 🇳🇿 **NZ orientation** — Compatible with civic data workflows used in adjacent projects (CDEM, GeoNet/LINZ/LAWA), while SWARMINT itself stays **local-first** and air-gap-friendly.
+
+---
+
+## 📚 References
+
+### 🔎 Log parsing & log anomaly detection
+- **DeepLog: Anomaly Detection and Diagnosis from System Logs** — LSTM sequence modeling; seminal baseline for log-sequence AD. (KDD’17).  [arXiv/Utah PDF] :contentReference[oaicite:0]{index=0}
+- **LogBERT: Log Anomaly Detection via BERT** — self-supervised masked/next-event tasks on logs; strong SOTA style. (2021).  [arXiv abs] :contentReference[oaicite:1]{index=1}
+- **Deep Learning for Anomaly Detection in Log Data: A Survey** — broad review of deep models & pipelines. (2022).  [arXiv] :contentReference[oaicite:2]{index=2}
+- **Log-based Anomaly Detection with Deep Learning** — compact survey + comparative framing. (2022).  [arXiv PDF] :contentReference[oaicite:3]{index=3}
+- **Drain: An Online Log Parsing Approach** — widely-used streaming template parser; pairs well with DeepLog-style pipelines. (ICWS’17).  [paper PDF] :contentReference[oaicite:4]{index=4}
+- **Practitioners’ Expectations on Log Anomaly Detection** — empirical study (312 practitioners); gap analysis vs research. (2024).  [arXiv] :contentReference[oaicite:5]{index=5}
+
+### 🔐 Provenance & supply-chain integrity
+- **in-toto: Providing farm-to-table guarantees for bits & bytes** — cryptographically verified build/CI chains. (USENIX Security’19).  [paper] :contentReference[oaicite:6]{index=6}
+- **The Update Framework (TUF)** — resilient software update model (roles, delegations, compromise recovery). (spec & pubs).  [site / pubs] :contentReference[oaicite:7]{index=7}
+- **SLSA: Supply-chain Levels for Software Artifacts** — defense-in-depth maturity rubric for build provenance. (framework).  [slsa.dev] :contentReference[oaicite:8]{index=8}
+- **Analyzing Challenges in Deployment of SLSA** — adoption study across 1,523 GitHub issues. (2024).  [arXiv] :contentReference[oaicite:9]{index=9}
+
+### 🧾 SBOM & standards
+- **NTIA: Minimum Elements for an SBOM** — foundational guidance. (2021).  [NTIA] :contentReference[oaicite:10]{index=10}
+- **CISA: 2025 Minimum Elements for an SBOM (update)** — current USG refresh; useful for roadmap notes. (2025).  [CISA] :contentReference[oaicite:11]{index=11}
+- **SPDX / CycloneDX** — de-facto SBOM formats (spec sites).  [link from your docs later]
+
+### ☁️ Threat intel exchange & mapping
+- **STIX 2.1 (OASIS Standard)** — CTI language; final 2.1 spec. (2021).  [OASIS] :contentReference[oaicite:12]{index=12}
+- **TAXII 2.1 (OASIS Standard)** — CTI transport (REST). (2021).  [OASIS] :contentReference[oaicite:13]{index=13}
+- **STIX 2.1 Best Practice Guide** — pragmatic authoring guidance. (CISA 2022).  [PDF] :contentReference[oaicite:14]{index=14}
+- **MITRE ATT&CK** — tactic/technique matrix for mapping anomalies to adversary behaviors. (living KB).  [site] :contentReference[oaicite:15]{index=15}
+
+> Tip: keep these in `docs/REFERENCES.md` with short 1-line takeaways; link that file from the README.
+
+
+## 🤝 **Contributing (Bee Dance)**
+![Workflow](https://img.shields.io/badge/Workflow-Feature%E2%86%92PR%E2%86%92Main-1f6feb)
+![Squash](https://img.shields.io/badge/Merge-Squash-555)
+
+~~~bash
+# 🌱 Start a short-lived branch
+git switch -c docs/readme-honey   # or: silver/smoke-v0.2
+
+# ✍️ Edit + preview (VS Code: Ctrl/Cmd-K V), then commit
+git add README.md
+git commit -m "docs: SIEM-themed honeycomb README"
 git push -u origin HEAD
-gh pr create -f -B main -t "feat(silver): metrics emitter" -b "Adds metrics.json; seeds counters & FRI band."
 
-# squash merge & clean up
-gh pr merge <NUMBER> --squash --delete-branch \
-  --subject "feat(silver): metrics emitter" \
-  --body "Adds metrics.json; counters; FRI band; wires into run_embryo."
-</details> <details> <summary><b>Branch protection (maintainers)</b></summary>
-Protect main: require PRs + status checks (CI at Silver).
+# 🔎 Open a PR to main
+gh pr create -f -B main -t "docs: SIEM honeycomb README" -b "Emoji badges, mermaid, Bronze capsule."
+~~~
 
-Protect bronze: block pushes & force-push; allow merges from no one.
+**Style:** `feat:`, `fix:`, `docs:`, `chore:`, `ci:`, `sec:` (+ 🐝 welcome)
 
-Optional: restrict who can create *-gate-* tags/releases.
+---
 
-</details> <details> <summary><b>Security disclosures</b></summary>
-Use GitHub Security Advisories or the profile contact method.
+## 🧭 References (Curated)
 
-Do not file public issues for sensitive findings.
+> Handpicked research & standards that inform SWARMINT’s design. Skim the bullets; follow the links when you want deeper proofs or patterns.
 
-</details> ```
+### 📜 Log parsing & log anomaly detection
+- **DeepLog** — LSTM sequence modeling; seminal baseline for log-sequence AD (KDD’17). [paper] :contentReference[oaicite:0]{index=0}  
+- **LogBERT** — masked/next-event prediction on logs; strong results (2021). [arXiv] :contentReference[oaicite:1]{index=1}  
+- **DRAIN (ICWS’17)** — widely-used streaming log template parser; pairs well with DeepLog-style pipelines. [paper PDF] :contentReference[oaicite:2]{index=2}  
+- **Survey (2022)** — broad review of deep log AD methods & pipelines. [arXiv] :contentReference[oaicite:3]{index=3}  
 
-## 📜 License & Attribution
+### 🔐 Provenance & software supply-chain integrity
+- **in-toto (USENIX Security’19)** — cryptographically verifiable supply-chain steps. [paper] :contentReference[oaicite:4]{index=4}  
+- **SLSA** — maturity levels for build provenance (framework). [site] :contentReference[oaicite:5]{index=5}  
+- **TUF** — resilient update framework; survives partial compromise. [spec/home] :contentReference[oaicite:6]{index=6}  
 
-<p>
-  <a href="./LICENSE"><img src="https://img.shields.io/badge/License-MIT-blue" alt="MIT"></a>
-  <img src="https://img.shields.io/badge/Copyright-©%202025%20MYTHIK--blip-111111" alt="Copyright">
-  <img src="https://img.shields.io/badge/Author-Kerehama%20Mcleod%20(%5FMYTHIK%5F)-1f6feb" alt="Author">
-</p>
+### 🧾 SBOM & standards
+- **NTIA: Minimum Elements for an SBOM (2021)** — foundational guidance. [PDF] :contentReference[oaicite:7]{index=7}  
+- **CISA: 2025 SBOM update (overview)** — current U.S. refresh; useful for roadmaps. [site] :contentReference[oaicite:8]{index=8}  
+- **SPDX** — de-facto SBOM format (specs). [site] :contentReference[oaicite:9]{index=9}  
+- **CycloneDX** — compact, security-focused SBOM (specs). [site] :contentReference[oaicite:10]{index=10}  
 
-**License:** MIT — see [`LICENSE`](./LICENSE).
+### 🛰️ Threat intel exchange & mapping
+- **STIX™ 2.1 (OASIS Standard)** — CTI objects & patterning. [PDF] :contentReference[oaicite:11]{index=11}  
+- **TAXII™ 2.1 (OASIS Standard)** — CTI transport (REST). [PDF] :contentReference[oaicite:12]{index=12}  
+- **MITRE ATT&CK®** — tactics/techniques knowledge base. [site] :contentReference[oaicite:13]{index=13}  
 
-**Author:** Kerehama Mcleod (MYTHIK-blip / _MYTHIK_)  
-**Project:** Homeostatic AI 🐝
+### 📈 Observability & exporters (for Silver+)
+- **OpenTelemetry Logs — data model & semantics** (stable). [spec] :contentReference[oaicite:14]{index=14}  
+- **Prometheus textfile collector** — emit metrics.json → Node Exporter. [docs] :contentReference[oaicite:15]{index=15}  
+- **Grafana Loki** — label-indexed log aggregation; cost-effective design. [docs] :contentReference[oaicite:16]{index=16}  
 
-<details>
-<summary><b>How to cite (Bronze release)</b></summary>
+### 🛡️ Incident response, logging & secure development
+- **NIST SP 800-92** — Guide to Computer Security Log Management (classic). [PDF] :contentReference[oaicite:17]{index=17}  
+- **NIST SP 800-61r3 (2025)** — Incident response profile aligned to CSF 2.0. [PDF] :contentReference[oaicite:18]{index=18}  
+- **NIST SP 800-218 (SSDF v1.1)** — secure software development framework. [PDF] :contentReference[oaicite:19]{index=19}  
 
-```bibtex
+### 🧪 Reproducible builds & checksum verification (air-gap friendly)
+- **Reproducible Builds — definitions & practices.** [docs] :contentReference[oaicite:20]{index=20}  
+- **Verifying SHA-256SUMS** — practical check flow. [how-to] :contentReference[oaicite:21]{index=21}  
+
+### 🧠 Remote attestation & evidence chain-of-custody
+- **Evidence Tampering & Chain of Custody in Layered Attestations (2024)** — formalizes tamper opportunities (TOP), tamper strategies (TSP), and evidence-protecting programs (EPPP) in Copland; includes Coq proofs. :contentReference[oaicite:22]{index=22} :contentReference[oaicite:23]{index=23}  
+
+### 🤝 Multi-agent coalitions (for future “swarm/coordination” heuristics)
+- **Detecting & Identifying Coalitions (AAAI Workshop 2011)** — clusters in “benefit space” to spot collusion without plan knowledge; good inspiration for PvP/PvE group-behavior flags. :contentReference[oaicite:24]{index=24} :contentReference[oaicite:25]{index=25}
+
+
+## 📜 **License & Attribution**
+![MIT](https://img.shields.io/badge/License-MIT-blue)
+
+**MIT** — see `LICENSE`.  
+Author: **Kerehama Mcleod (MYTHIK-blip / _MYTHIK_)**
+
+**Cite (Bronze release)**
+~~~bibtex
 @software{swarmint_autopoiesis_bronze_v0_1_2025,
   author  = {Mcleod, Kerehama},
-  title   = {SWARMINT-AUTOPOIESIS: Provenance-first, homeostatic SIEM embryo},
+  title   = {SWARMINT-AUTOPOIESIS: Hive-born, homeostatic SIEM embryo},
   year    = {2025},
   version = {bronze-gate-v0.1},
   url     = {https://github.com/MYTHIK-blip/SWARMINT-AUTOPOIESIS},
-  note    = {Immutable rollback branch: bronze; Release tarball with SHA256SUMS}
+  note    = {Immutable rollback branch: bronze; air-gap tarball + checksums}
 }
-</details> <details> <summary><b>Acknowledgments</b></summary>
-Python ecosystem & open-source maintainers 🫶
+~~~
 
-Operators who value provenance, minimal surface, and clear rollback lines
+---
 
-Future contributors shaping Silver → Gold → Diamond
+## ✅ **Bronze Invariants (Pinboard)**
+![Checklist](https://img.shields.io/badge/Checklist-Bronze%20Invariants-0b8f00)
 
-</details>
-<sub><i>All product names, logos, and brands are property of their respective owners. Use is for identification only and does not imply endorsement.</i></sub>
+- [ ] `bronze` branch protected; matches tag `bronze-gate-v0.1`  
+- [ ] Release includes tarball + `SHA256SUMS.txt`  
+- [ ] `.gitignore` covers `data/`, caches, and `ops/secret.key`  
+- [ ] README renders clean (badges, mermaid, fenced blocks)  
+- [ ] No mixed HTML; blank lines around lists/blocks
